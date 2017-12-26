@@ -12,5 +12,9 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('map');
+});
+
+Route::prefix('data')->group(function() {
+    Route::get('states', 'StateController@retrieve');
 });
