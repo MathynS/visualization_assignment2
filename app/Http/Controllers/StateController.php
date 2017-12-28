@@ -20,7 +20,7 @@ class StateController extends Controller
         $state_codes = State::get();
         foreach ($state_codes as $state_code)
         {
-            $values = $state_code->measurements()->limit(1000)->get();
+            $values = $state_code->measurements()->get();
             if (empty($values)) {
                 continue;
             }
