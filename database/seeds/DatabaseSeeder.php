@@ -52,10 +52,22 @@ class DatabaseSeeder extends Seeder
                 continue;
             }
             $state = $state[0]['id'];
-            $measurement = new Measurement(array("date" => $entry['Date Local'], "mean" => $entry['NO2 Mean'], "max" => $entry['NO2 1st Max Value']));
-            $measurement->state()->associate($state);
-//            $measurement->pollution()->associate(1);
-            $measurement->save();
+            $measurement1 = new Measurement(array("date" => $entry['Date Local'], "mean" => $entry['NO2 Mean'], "max" => $entry['NO2 1st Max Value']));
+            $measurement1->state()->associate($state);
+            $measurement1->pollution()->associate(1);
+            $measurement1->save();
+            $measurement2 = new Measurement(array("date" => $entry['Date Local'], "mean" => $entry['O3 Mean'], "max" => $entry['O3 1st Max Value']));
+            $measurement2->state()->associate($state);
+            $measurement2->pollution()->associate(2);
+            $measurement2->save();
+            $measurement3 = new Measurement(array("date" => $entry['Date Local'], "mean" => $entry['SO2 Mean'], "max" => $entry['SO2 1st Max Value']));
+            $measurement3->state()->associate($state);
+            $measurement3->pollution()->associate(3);
+            $measurement3->save();
+            $measurement4 = new Measurement(array("date" => $entry['Date Local'], "mean" => $entry['CO Mean'], "max" => $entry['CO 1st Max Value']));
+            $measurement4->state()->associate($state);
+            $measurement4->pollution()->associate(4);
+            $measurement4->save();
         }
 
         // $this->call(UsersTableSeeder::class);

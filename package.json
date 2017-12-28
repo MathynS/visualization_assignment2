@@ -19,6 +19,7 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
+        "bootstrap-switch": "^3.3.4",
         "d3": "^4.12.0"
     }
 }

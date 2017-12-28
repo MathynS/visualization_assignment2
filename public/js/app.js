@@ -42948,6 +42948,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 function doubleDigit(digit) {
@@ -42982,7 +43014,7 @@ function tooltipHtml(n, d) {
     mounted: function mounted() {
         var _this = this;
 
-        axios.get('/data/states').then(function (response) {
+        axios.get('/data/cache/states').then(function (response) {
             return _this.setData(response.data);
         }).catch(function (error) {
             return console.log(error);
@@ -42996,12 +43028,14 @@ function tooltipHtml(n, d) {
         },
         getMapData: function getMapData(date) {
             console.log(date);
+            console.log(this.pollutionType);
             var data = {};
             for (var state in this.totalData) {
-                if (this.totalData[state][date] !== undefined) {
-                    data[state] = this.totalData[state][date];
+                if (this.totalData[state][this.pollutionType][date] !== undefined) {
+                    data[state] = this.totalData[state][this.pollutionType][date];
                 }
             }
+            console.log(data);
             this.drawMap(data);
         },
         updateDate: function updateDate() {
@@ -43019,7 +43053,7 @@ function tooltipHtml(n, d) {
                 }
             });
             for (var state in data) {
-                data[state]['color'] = d3.interpolate("#ffffcc", "#800026")(data[state]['mean'] / 100);
+                data[state]['color'] = d3.interpolate("#ffffcc", "#800026")(data[state]['max'] / 100);
             }
             console.log(data);
             d3.select('svg').text('');
@@ -43037,39 +43071,141 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { attrs: { id: "tooltip" } }),
-    _vm._v(" "),
-    _c("svg", { attrs: { width: "960", height: "600", id: "statesvg" } }),
-    _vm._v(" "),
-    _c("div", { staticClass: "slidecontainer" }, [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.dateSlider,
-            expression: "dateSlider"
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("span", [_vm._v("NO2")]),
+      _vm._v(" "),
+      _c("label", { staticClass: "switch" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.pollutionType,
+              expression: "pollutionType"
+            }
+          ],
+          attrs: { type: "radio", value: "NO2" },
+          domProps: { checked: _vm._q(_vm.pollutionType, "NO2") },
+          on: {
+            change: function($event) {
+              _vm.pollutionType = "NO2"
+            }
           }
-        ],
-        staticClass: "slider",
-        attrs: {
-          type: "range",
-          min: "0",
-          max: "9",
-          value: "0",
-          onchange: _vm.updateDate()
-        },
-        domProps: { value: _vm.dateSlider },
-        on: {
-          __r: function($event) {
-            _vm.dateSlider = $event.target.value
+        }),
+        _vm._v(" "),
+        _c("span", { staticClass: "checker round" })
+      ]),
+      _vm._v(" "),
+      _c("span", [_vm._v("O3")]),
+      _vm._v(" "),
+      _c("label", { staticClass: "switch" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.pollutionType,
+              expression: "pollutionType"
+            }
+          ],
+          attrs: { type: "radio", value: "O3" },
+          domProps: { checked: _vm._q(_vm.pollutionType, "O3") },
+          on: {
+            change: function($event) {
+              _vm.pollutionType = "O3"
+            }
           }
-        }
-      })
+        }),
+        _vm._v(" "),
+        _c("span", { staticClass: "checker round" })
+      ]),
+      _vm._v(" "),
+      _c("span", [_vm._v("SO2")]),
+      _vm._v(" "),
+      _c("label", { staticClass: "switch" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.pollutionType,
+              expression: "pollutionType"
+            }
+          ],
+          attrs: { type: "radio", value: "SO2" },
+          domProps: { checked: _vm._q(_vm.pollutionType, "SO2") },
+          on: {
+            change: function($event) {
+              _vm.pollutionType = "SO2"
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("span", { staticClass: "checker round" })
+      ]),
+      _vm._v(" "),
+      _c("span", [_vm._v("CO")]),
+      _vm._v(" "),
+      _c("label", { staticClass: "switch" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.pollutionType,
+              expression: "pollutionType"
+            }
+          ],
+          attrs: { type: "radio", value: "CO" },
+          domProps: { checked: _vm._q(_vm.pollutionType, "CO") },
+          on: {
+            change: function($event) {
+              _vm.pollutionType = "CO"
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("span", { staticClass: "checker round" })
+      ])
     ]),
     _vm._v(" "),
-    _c("span", [_vm._v(_vm._s(_vm.date))])
+    _c("div", { staticClass: "row" }, [
+      _c("div", { attrs: { id: "tooltip" } }),
+      _vm._v(" "),
+      _c("svg", { attrs: { width: "960", height: "600", id: "statesvg" } })
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "slidecontainer" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.dateSlider,
+              expression: "dateSlider"
+            }
+          ],
+          staticClass: "slider",
+          attrs: {
+            type: "range",
+            min: "0",
+            max: "364",
+            value: "0",
+            onchange: _vm.updateDate()
+          },
+          domProps: { value: _vm.dateSlider },
+          on: {
+            __r: function($event) {
+              _vm.dateSlider = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("span", [_vm._v(_vm._s(_vm.date))])
+    ])
   ])
 }
 var staticRenderFns = []

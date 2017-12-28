@@ -87,7 +87,68 @@
             background: #4CAF50; /* Green background */
             cursor: pointer; /* Cursor on hover */
         }
+
+        /* The switch - the box around the slider */
+        .switch {
+            vertical-align:top;
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {display:none;}
+
+        /* The slider */
+        .checker {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .checker:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .checker {
+            background-color: #2196F3;
+        }
+
+        input:focus + .checker {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .checker:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .checker.round {
+            border-radius: 34px;
+        }
+
+        .checker.round:before {
+            border-radius: 50%;
+        }
     </style>
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <script src="/js/uStates.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
 </head>

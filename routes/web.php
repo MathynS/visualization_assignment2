@@ -16,5 +16,6 @@ Route::get('/', function () {
 });
 
 Route::prefix('data')->group(function() {
+    Route::get('cache/states', 'StateController@cache_retrieve');
     Route::get('states', 'StateController@retrieve');
 });

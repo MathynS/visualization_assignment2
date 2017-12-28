@@ -21,8 +21,8 @@ class CreateMeasurementsTable extends Migration
             $table->dateTime('date');
             $table->integer('state_id')->unsigned()->default(0);
             $table->foreign('state_id')->references('id')->on('states');
-//            $table->integer('pollution_id')->unsigned();
-//            $table->foreign('pollution_id')->references('id')->on('pollutions');
+            $table->integer('pollution_id')->unsigned();
+            $table->foreign('pollution_id')->references('id')->on('pollutions');
         });
     }
 

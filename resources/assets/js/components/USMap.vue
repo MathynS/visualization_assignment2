@@ -1,15 +1,48 @@
 <template>
-    <div>
-        <div id="tooltip"></div><!-- div to hold tooltip. -->
-        <svg width="960" height="600" id="statesvg"></svg> <!-- svg to hold the map. -->
-        <div class="slidecontainer">
-            <input type="range" min="0" max="9" value="0" class="slider" v-model="dateSlider" v-bind:onchange="updateDate()">
+    <div class="container">
+        <div class="row">
+
+            <span>NO2</span>
+            <label class="switch">
+                <input type="radio" v-model="pollutionType" value="NO2">
+                <span class="checker round"></span>
+            </label>
+
+            <span>O3</span>
+            <label class="switch">
+                <input type="radio" v-model="pollutionType" value="O3">
+                <span class="checker round"></span>
+            </label>
+
+            <span>SO2</span>
+            <label class="switch">
+                <input type="radio" v-model="pollutionType" value="SO2">
+                <span class="checker round"></span>
+            </label>
+
+            <span>CO</span>
+            <label class="switch">
+                <input type="radio" v-model="pollutionType" value="CO">
+                <span class="checker round"></span>
+            </label>
         </div>
-        <span>{{date}}</span>
+
+        <div class="row">
+            <div id="tooltip"></div><!-- div to hold tooltip. -->
+            <svg width="960" height="600" id="statesvg"></svg> <!-- svg to hold the map. -->
+        </div>
+
+        <div class="row">
+            <div class="slidecontainer">
+                <input type="range" min="0" max="364" value="0" class="slider" v-model="dateSlider" v-bind:onchange="updateDate()">
+            </div>
+            <span>{{date}}</span>
+        </div>
     </div>
 </template>
 
 <script>
+
 
     function doubleDigit(digit) {
         if (digit.toString().length == 1) {
@@ -43,7 +76,7 @@
             }
         },
         mounted() {
-            axios.get('/data/states')
+            axios.get('/data/cache/states')
                 .then(response => this.setData(response.data))
                 .catch(error => console.log(error))
         },
@@ -54,12 +87,14 @@
             },
             getMapData(date) {
                 console.log(date);
+                console.log(this.pollutionType);
                 var data = {};
                 for (var state in this.totalData) {
-                    if (this.totalData[state][date] !== undefined) {
-                        data[state] = this.totalData[state][date];
+                    if (this.totalData[state][this.pollutionType][date] !== undefined) {
+                        data[state] = this.totalData[state][this.pollutionType][date];
                     }
                 }
+                console.log(data);
                 this.drawMap(data);
             },
             updateDate() {
@@ -82,7 +117,7 @@
                         }
                     });
                 for (var state in data) {
-                    data[state]['color'] = d3.interpolate("#ffffcc", "#800026")(data[state]['mean']/100);
+                    data[state]['color'] = d3.interpolate("#ffffcc", "#800026")(data[state]['max']/100);
                 }
                 console.log(data)
                 d3.select('svg').text('');
