@@ -1,36 +1,94 @@
 <template>
-    <svg width="960" height="600" id="statesvg"></svg>
+    <div>
+        <div id="tooltip"></div><!-- div to hold tooltip. -->
+        <svg width="960" height="600" id="statesvg"></svg> <!-- svg to hold the map. -->
+        <div class="slidecontainer">
+            <input type="range" min="0" max="9" value="0" class="slider" v-model="dateSlider" v-bind:onchange="updateDate()">
+        </div>
+        <span>{{date}}</span>
+    </div>
 </template>
 
 <script>
 
+    function doubleDigit(digit) {
+        if (digit.toString().length == 1) {
+            return "0" + digit;
+        }
+        return digit;
+    }
+
+    function formatDate(date) {
+        var day = doubleDigit(date.getDate());
+        var month = doubleDigit(date.getMonth()+1);
+        var year = date.getFullYear();
+        return year + '-' + month + '-' + day + " 00:00:00";
+    }
+
     function tooltipHtml(n, d){	/* function to create html content string in tooltip div. */
         return "<h4>"+n+"</h4><table>"+
-            "<tr><td>Low</td><td>"+(d.low)+"</td></tr>"+
-            "<tr><td>Average</td><td>"+(d.avg)+"</td></tr>"+
-            "<tr><td>High</td><td>"+(d.high)+"</td></tr>"+
+            "<tr><td>Max</td><td>"+(d.max)+"</td></tr>"+
+            "<tr><td>Average</td><td>"+(d.mean)+"</td></tr>"+
             "</table>";
     }
 
-    var sampleData ={};	/* Sample random data. */
-    ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
-        "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH",
-        "MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT",
-        "CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN",
-        "WI", "MO", "AR", "OK", "KS", "LS", "VA"]
-        .forEach(function(d){
-            var low=Math.round(100*Math.random()),
-                mid=Math.round(100*Math.random()),
-                high=Math.round(100*Math.random());
-            sampleData[d]={low:d3.min([low,mid,high]), high:d3.max([low,mid,high]),
-                avg:Math.round((low+mid+high)/3), color:d3.interpolate("#ffffcc", "#800026")(low/100)};
-        });
-
-    /* draw states on id #statesvg */
-    uStates.draw("#statesvg", sampleData, tooltipHtml);
-
-    d3.select(self.frameElement).style("height", "600px");
-
     export default {
+        data: function(){
+            return{
+                date: new Date('2000-01-01'),
+                totalData: {},
+                dateSlider: 0,
+                lastSlider: 0,
+                pollutionType: 'NO2'
+            }
+        },
+        mounted() {
+            axios.get('/data/states')
+                .then(response => this.setData(response.data))
+                .catch(error => console.log(error))
+        },
+        methods: {
+            setData(data) {
+                this.totalData = data;
+                this.getMapData('2000-01-01 00:00:00');
+            },
+            getMapData(date) {
+                console.log(date);
+                var data = {};
+                for (var state in this.totalData) {
+                    if (this.totalData[state][date] !== undefined) {
+                        data[state] = this.totalData[state][date];
+                    }
+                }
+                this.drawMap(data);
+            },
+            updateDate() {
+                console.log(this.dateSlider);
+                this.date.setDate(this.date.getDate() + (this.dateSlider - this.lastSlider));
+                this.lastSlider = this.dateSlider;
+                this.getMapData(formatDate(this.date));
+            },
+            drawMap(data) {
+                ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
+                    "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH",
+                    "MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT",
+                    "CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN",
+                    "WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+                    .forEach(function(d){
+                        if (data[d] == null) {
+                            data[d] = {};
+                            data[d]['mean'] = 0;
+                            data[d]['max'] = 0;
+                        }
+                    });
+                for (var state in data) {
+                    data[state]['color'] = d3.interpolate("#ffffcc", "#800026")(data[state]['mean']/100);
+                }
+                console.log(data)
+                d3.select('svg').text('');
+                uStates.draw("#statesvg", data, tooltipHtml);
+                d3.select(self.frameElement).style("height", "600px");
+            }
+        }
     }
 </script>

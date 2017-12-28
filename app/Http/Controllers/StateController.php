@@ -14,7 +14,18 @@ class StateController extends Controller
         $state_codes = State::get();
         foreach ($state_codes as $state_code)
         {
-            $response[$state_code->code] = $state_code->measurements()->first(['max', 'mean']);
+            $values = $state_code->measurements()->where('date', '<=', '2000-01-10')->get(['max', 'mean', 'date']);
+            if (empty($values)) {
+                continue;
+            }
+            foreach ($values as $value) {
+                if (array_key_exists($state_code->code, $response)){
+                    $response[$state_code->code][$value->date] = $value;
+                }
+                else {
+                    $response[$state_code->code] = array($value->date => $value);
+                }
+            }
         }
         return $response;
     }
