@@ -34,7 +34,7 @@ def aggregate_rows_by_median(rows, county_code, date_local):
     for column in INFO_COLUMNS:
         for index_row, row in rows.head(1).iterrows():
             if column == DATE_LOCAL_COLUMN:
-                row_dict[column] = row[column][:7]
+                row_dict[column] = row[column][:7] + "-01"
             else:
                 row_dict[column] = row[column]
         
