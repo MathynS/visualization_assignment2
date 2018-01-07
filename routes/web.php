@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('map');
 });
 
+Route::get('/test', function () {
+    return view('county_map');
+});
+
 Route::prefix('data')->group(function() {
     Route::get('cache/states', 'StateController@cache_retrieve');
     Route::get('states', 'StateController@retrieve');

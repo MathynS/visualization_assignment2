@@ -34,7 +34,7 @@
 
         <div class="row">
             <div class="slidecontainer">
-                <input type="range" min="0" max="364" value="0" class="slider" v-model="dateSlider" v-bind:onchange="updateDate()">
+                <input type="range" min="0" max="11" value="0" class="slider" v-model="dateSlider" v-bind:onchange="updateDate()">
             </div>
             <span>{{date}}</span>
         </div>
@@ -76,7 +76,7 @@
             }
         },
         mounted() {
-            axios.get('/data/cache/states')
+            axios.get('/data/states')
                 .then(response => this.setData(response.data))
                 .catch(error => console.log(error))
         },
@@ -99,7 +99,7 @@
             },
             updateDate() {
                 console.log(this.dateSlider);
-                this.date.setDate(this.date.getDate() + (this.dateSlider - this.lastSlider));
+                this.date.setMonth(this.date.getMonth() + (this.dateSlider - this.lastSlider));
                 this.lastSlider = this.dateSlider;
                 this.getMapData(formatDate(this.date));
             },

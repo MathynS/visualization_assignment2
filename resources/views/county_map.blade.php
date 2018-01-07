@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<style>
+
+    .counties :hover {
+        fill: red;
+    }
+
+    .county-borders {
+        fill: none;
+        stroke: #fff;
+        stroke-width: 0.5px;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+        pointer-events: none;
+    }
+
+</style>
+<svg width="960" height="600"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/topojson.v2.min.js"></script>
+<script>
+
+    var svg = d3.select("svg");
+
+    var path = d3.geoPath();
+    console.log(path);
+
+    d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
+        if (error) throw error;
+
+        svg.append("g")
+            .attr("class", "counties")
+            .selectAll("path")
+            .data(topojson.feature(us, us.objects.counties).features)
+            .enter().append("path")
+            .attr("d", path)
+            .style("fill",function(d){ console.log(d); return "#800026"; });
+
+        console.log(us);
+        svg.append("path")
+            .attr("class", "county-borders")
+            .attr("d", path(topojson.mesh(us, us.objects.counties, function(a, b) { return a !== b; })));
+    });
+
+</script>

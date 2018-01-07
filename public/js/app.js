@@ -43014,7 +43014,7 @@ function tooltipHtml(n, d) {
     mounted: function mounted() {
         var _this = this;
 
-        axios.get('/data/cache/states').then(function (response) {
+        axios.get('/data/states').then(function (response) {
             return _this.setData(response.data);
         }).catch(function (error) {
             return console.log(error);
@@ -43040,7 +43040,7 @@ function tooltipHtml(n, d) {
         },
         updateDate: function updateDate() {
             console.log(this.dateSlider);
-            this.date.setDate(this.date.getDate() + (this.dateSlider - this.lastSlider));
+            this.date.setMonth(this.date.getMonth() + (this.dateSlider - this.lastSlider));
             this.lastSlider = this.dateSlider;
             this.getMapData(formatDate(this.date));
         },
@@ -43191,7 +43191,7 @@ var render = function() {
           attrs: {
             type: "range",
             min: "0",
-            max: "364",
+            max: "11",
             value: "0",
             onchange: _vm.updateDate()
           },
