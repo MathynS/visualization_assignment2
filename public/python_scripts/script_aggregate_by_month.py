@@ -11,6 +11,7 @@ DELTA_DEBUG = 100
 DEBUG = True
 COUNTY_CODE_COLUMN = 'County Code'
 DATE_LOCAL_COLUMN = 'Date Local'
+STATE_CODE_COLUMN = 'State Code'
 INFO_COLUMNS = ['State Code', 'County Code', 'Site Num', 'Address',
                 'State', 'County', 'City', 'Date Local', 'NO2 Units',
                 'O3 Units', 'SO2 Units', 'CO Units']
@@ -27,27 +28,29 @@ parser = argparse.ArgumentParser(description='Remove duplicates from csv files i
 parser.add_argument('--idir', help="Input directory", required=True)
 parser.add_argument('--odir', help="Output directory", required=True)
 
-def aggregate_rows_by_median(rows, county_code, date_local):
+def aggregate_rows_by_median(rows, state_code, county_code, date_local):
 
     row_dict = {}
     
     for column in INFO_COLUMNS:
         for index_row, row in rows.head(1).iterrows():
             if column == DATE_LOCAL_COLUMN:
-                row_dict[column] = row[column][:7]
+                row_dict[column] = row[column][:7] + "-01"
             else:
                 row_dict[column] = row[column]
         
     
     for column in NUMERIC_COLUMNS:
         values = []
-        for index_row, row in rows[[column, COUNTY_CODE_COLUMN, DATE_LOCAL_COLUMN]].iterrows():
-            if row[COUNTY_CODE_COLUMN] == county_code and row[DATE_LOCAL_COLUMN].startswith(date_local):
+        for index_row, row in rows[[column, STATE_CODE_COLUMN, COUNTY_CODE_COLUMN, DATE_LOCAL_COLUMN]].iterrows():
+            if row[STATE_CODE_COLUMN] == state_code and row[COUNTY_CODE_COLUMN] == county_code and row[DATE_LOCAL_COLUMN].startswith(date_local):
                 if not pd.isna(row[column]):
                     values.append(row[column])
             else:
-                debug("county_code_column: {}, date_local_column: {}".format(row[COUNTY_CODE_COLUMN], row[DATE_LOCAL_COLUMN]), DEBUG)
-                debug("county_code: {}, date_local: {}".format(county_code, date_local), DEBUG)
+                debug("state_code_column: {}, county_code_column: {}, date_local_column: {}".format(row[STATE_CODE_COLUMN],
+                                                                                                    row[COUNTY_CODE_COLUMN],
+                                                                                                    row[DATE_LOCAL_COLUMN]), DEBUG)
+                debug("state_code: {}, county_code: {}, date_local: {}".format(state_code, county_code, date_local), DEBUG)
                 debug(row, DEBUG)
                 #print("unexpected value for row")
 
@@ -60,19 +63,21 @@ def aggregate_rows_by_median(rows, county_code, date_local):
             
                 
 def remove_duplicates(original_dataframe):
-    county_and_dates = original_dataframe[[COUNTY_CODE_COLUMN, DATE_LOCAL_COLUMN]]
+    state_county_and_dates = original_dataframe[[STATE_CODE_COLUMN, COUNTY_CODE_COLUMN, DATE_LOCAL_COLUMN]]
 
-    county_and_dates[DATE_LOCAL_COLUMN] = county_and_dates[DATE_LOCAL_COLUMN].str.slice(0, 7)
+    state_county_and_dates[DATE_LOCAL_COLUMN] = state_county_and_dates[DATE_LOCAL_COLUMN].str.slice(0, 7)
     #debug(county_and_dates, DEBUG)
-    unique_county_and_dates = county_and_dates.drop_duplicates()
+    unique_state_county_and_dates = state_county_and_dates.drop_duplicates()
     #debug(unique_county_and_dates, DEBUG)
     new_dataframe = pd.DataFrame(columns = original_dataframe.columns)
 
     row_counter = 1
-    for row_index, row in unique_county_and_dates.iterrows():
-        sliced_dataframe = original_dataframe[(original_dataframe[COUNTY_CODE_COLUMN] == row[COUNTY_CODE_COLUMN]) & (original_dataframe[DATE_LOCAL_COLUMN].str.slice(0, 7) == row[DATE_LOCAL_COLUMN])]
+    for row_index, row in unique_state_county_and_dates.iterrows():
+        sliced_dataframe = original_dataframe[(original_dataframe[STATE_CODE_COLUMN] == row[STATE_CODE_COLUMN]) & (original_dataframe[COUNTY_CODE_COLUMN] == row[COUNTY_CODE_COLUMN]) & (original_dataframe[DATE_LOCAL_COLUMN].str.slice(0, 7) == row[DATE_LOCAL_COLUMN])]
         rdict = aggregate_rows_by_median(sliced_dataframe,
-                                         row[COUNTY_CODE_COLUMN], row[DATE_LOCAL_COLUMN])
+                                         row[STATE_CODE_COLUMN],
+                                         row[COUNTY_CODE_COLUMN],
+                                         row[DATE_LOCAL_COLUMN])
         new_dataframe = new_dataframe.append(rdict, ignore_index=True)
 
         
