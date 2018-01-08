@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\State;
+use App\Measurement;
+use App\Pollution;
 use Illuminate\Http\Request;
 
 class StateController extends Controller
@@ -16,9 +18,14 @@ class StateController extends Controller
 
     public function retrieve()
     {
-        $response = array();
-        $state_codes = State::get();
-        foreach ($state_codes as $state_code)
+        $response = array('data' => array(), 'maxima' => array());
+        
+        foreach (Pollution::get() as $pollution){
+            $response['maxima'][$pollution->name] = array('mean' => Measurement::where('id', $pollution->id)->max('mean'));
+            $response['maxima'][$pollution->name]['max'] = Measurement::where('id', $pollution->id)->max('max');
+        }
+        return $response;
+        foreach (State::get() as $state_code)
         {
             $values = $state_code->measurements()->get();
             if (empty($values)) {
@@ -26,21 +33,19 @@ class StateController extends Controller
             }
             foreach ($values as $value) {
                 $type = $value->pollution()->first();
-                if (array_key_exists($state_code->code, $response)){
-                    if (array_key_exists($type->name, $response[$state_code->code])) {
-                        $response[$state_code->code][$type->name][$value->date] = $value;
+                if (array_key_exists($state_code->code, $response['data'])){
+                    if (array_key_exists($type->name, $response['data'][$state_code->code])) {
+                        $response['data'][$state_code->code][$type->name][$value->date] = $value;
                     }
                     else {
-                        $response[$state_code->code][$type->name] = array($value->date => $value);
+                        $response['data'][$state_code->code][$type->name] = array($value->date => $value);
                     }
                 }
                 else {
-                    $response[$state_code->code] = array($type->name => array($value->date => $value));
+                    $response['data'][$state_code->code] = array($type->name => array($value->date => $value));
                 }
             }
         }
         return $response;
     }
-
-
 }

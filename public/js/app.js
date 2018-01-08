@@ -43008,13 +43008,14 @@ function tooltipHtml(n, d) {
             totalData: {},
             dateSlider: 0,
             lastSlider: 0,
-            pollutionType: 'NO2'
+            pollutionType: 'NO2',
+            maxima: {}
         };
     },
     mounted: function mounted() {
         var _this = this;
 
-        axios.get('/data/states').then(function (response) {
+        axios.get('/data/cache/states').then(function (response) {
             return _this.setData(response.data);
         }).catch(function (error) {
             return console.log(error);
@@ -43023,7 +43024,8 @@ function tooltipHtml(n, d) {
 
     methods: {
         setData: function setData(data) {
-            this.totalData = data;
+            this.totalData = data['data'];
+            this.maxima = data['maxima'];
             this.getMapData('2000-01-01 00:00:00');
         },
         getMapData: function getMapData(date) {
@@ -43031,6 +43033,7 @@ function tooltipHtml(n, d) {
             console.log(this.pollutionType);
             var data = {};
             for (var state in this.totalData) {
+                console.log(state);
                 if (this.totalData[state][this.pollutionType][date] !== undefined) {
                     data[state] = this.totalData[state][this.pollutionType][date];
                 }
@@ -43053,7 +43056,10 @@ function tooltipHtml(n, d) {
                 }
             });
             for (var state in data) {
-                data[state]['color'] = d3.interpolate("#ffffcc", "#800026")(data[state]['max'] / 100);
+                if (this.maxima[this.pollutionType] !== undefined) {
+                    console.log(data[state]['max'], this.maxima[this.pollutionType]['max']);
+                    data[state]['color'] = d3.interpolate("#ffffcc", "#800026")(data[state]['max'] / this.maxima[this.pollutionType]['max']);
+                }
             }
             console.log(data);
             d3.select('svg').text('');
@@ -43191,7 +43197,7 @@ var render = function() {
           attrs: {
             type: "range",
             min: "0",
-            max: "11",
+            max: "196",
             value: "0",
             onchange: _vm.updateDate()
           },

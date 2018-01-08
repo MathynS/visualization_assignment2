@@ -17,4 +17,9 @@ class Measurement extends Model
         return $this->belongsTo('App\Pollution');
     }
 
+    public function county()
+    {
+    	return $this->belongsTo('App\county');
+    }
+
 }

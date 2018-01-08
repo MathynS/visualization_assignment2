@@ -18,11 +18,11 @@ class CreateMeasurementsTable extends Migration
             $table->timestamps();
             $table->float('max');
             $table->float('mean');
-            $table->integer('county_code');
-            $table->string('county');
             $table->dateTime('date');
             $table->integer('state_id')->unsigned()->default(0);
             $table->foreign('state_id')->references('id')->on('states');
+            $table->integer('county_id')->unsigned()->default(0);
+            $table->foreign('county_id')->references('id')->on('counties');
             $table->integer('pollution_id')->unsigned();
             $table->foreign('pollution_id')->references('id')->on('pollutions');
         });

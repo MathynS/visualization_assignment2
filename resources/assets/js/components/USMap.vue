@@ -34,7 +34,7 @@
 
         <div class="row">
             <div class="slidecontainer">
-                <input type="range" min="0" max="11" value="0" class="slider" v-model="dateSlider" v-bind:onchange="updateDate()">
+                <input type="range" min="0" max="196" value="0" class="slider" v-model="dateSlider" v-bind:onchange="updateDate()">
             </div>
             <span>{{date}}</span>
         </div>
@@ -72,17 +72,19 @@
                 totalData: {},
                 dateSlider: 0,
                 lastSlider: 0,
-                pollutionType: 'NO2'
+                pollutionType: 'NO2',
+                maxima: {}
             }
         },
         mounted() {
-            axios.get('/data/states')
+            axios.get('/data/cache/states')
                 .then(response => this.setData(response.data))
                 .catch(error => console.log(error))
         },
         methods: {
             setData(data) {
-                this.totalData = data;
+                this.totalData = data['data'];
+                this.maxima = data['maxima'];
                 this.getMapData('2000-01-01 00:00:00');
             },
             getMapData(date) {
@@ -90,6 +92,7 @@
                 console.log(this.pollutionType);
                 var data = {};
                 for (var state in this.totalData) {
+                    console.log(state);
                     if (this.totalData[state][this.pollutionType][date] !== undefined) {
                         data[state] = this.totalData[state][this.pollutionType][date];
                     }
@@ -117,7 +120,12 @@
                         }
                     });
                 for (var state in data) {
-                    data[state]['color'] = d3.interpolate("#ffffcc", "#800026")(data[state]['max']/100);
+                    if (this.maxima[this.pollutionType] !== undefined)
+                    {
+                        console.log(data[state]['max'] ,this.maxima[this.pollutionType]['max']);
+                        data[state]['color'] = d3.interpolate("#ffffcc", "#800026")
+                            (data[state]['max']/this.maxima[this.pollutionType]['max']);
+                    }
                 }
                 console.log(data)
                 d3.select('svg').text('');
