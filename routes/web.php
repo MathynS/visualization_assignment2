@@ -11,8 +11,12 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/map', function () {
     return view('map');
+});
+
+Route::get('/chart', function () {
+    return view('area');
 });
 
 Route::get('/test', function () {

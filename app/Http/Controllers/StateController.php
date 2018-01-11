@@ -19,18 +19,19 @@ class StateController extends Controller
     public function retrieve()
     {
         $response = array('data' => array(), 'maxima' => array());
-        
+        $response['dates'] = Measurement::distinct('date')->pluck('date');
+
         foreach (Pollution::get() as $pollution){
-            $response['maxima'][$pollution->name] = array('mean' => Measurement::where('id', $pollution->id)->max('mean'));
-            $response['maxima'][$pollution->name]['max'] = Measurement::where('id', $pollution->id)->max('max');
+            $response['maxima'][$pollution->name] = array('mean' => Measurement::where('pollution_id', $pollution->id)->max('mean'));
+            $response['maxima'][$pollution->name]['max'] = Measurement::where('pollution_id', $pollution->id)->max('max');
         }
-        return $response;
         foreach (State::get() as $state_code)
         {
             $values = $state_code->measurements()->get();
             if (empty($values)) {
                 continue;
             }
+            $response['data'][$state_code->code] = array('name' => $state_code->name);
             foreach ($values as $value) {
                 $type = $value->pollution()->first();
                 if (array_key_exists($state_code->code, $response['data'])){
@@ -45,6 +46,7 @@ class StateController extends Controller
                     $response['data'][$state_code->code] = array($type->name => array($value->date => $value));
                 }
             }
+           //$response['data'][$state_code->code]['name'] = $state_code->name;
         }
         return $response;
     }

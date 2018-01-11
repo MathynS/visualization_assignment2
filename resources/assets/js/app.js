@@ -16,6 +16,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('us-map', require('./components/USMap.vue'));
+Vue.component('area-chart', require('./components/AreaChart.vue'));
 
 const app = new Vue({
     el: '#app'

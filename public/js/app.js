@@ -988,6 +988,7 @@ window.Vue = __webpack_require__(35);
  */
 
 Vue.component('us-map', __webpack_require__(38));
+Vue.component('area-chart', __webpack_require__(52));
 
 var app = new Vue({
   el: '#app'
@@ -43229,6 +43230,164 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(39)
+/* script */
+var __vue_script__ = __webpack_require__(54)
+/* template */
+var __vue_template__ = __webpack_require__(53)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/AreaChart.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-399416aa", Component.options)
+  } else {
+    hotAPI.reload("data-v-399416aa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("svg", { attrs: { width: "960", height: "600", id: "areasvg" } })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-399416aa", module.exports)
+  }
+}
+
+/***/ }),
+/* 54 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+       data: function data() {
+              return {
+                     data: {},
+                     pollutionType: 'NO2'
+              };
+       },
+       mounted: function mounted() {
+              var _this = this;
+
+              axios.get('/data/cache/states').then(function (response) {
+                     return _this.drawChart(response.data);
+              }).catch(function (error) {
+                     return console.log(error);
+              });
+       },
+
+       methods: {
+              drawChart: function drawChart(response) {
+                     console.log(response);
+                     var data = [];
+                     for (var date in response.dates) {
+                            console.log(response.dates[date]);
+                            if (Date(response.dates[date]) > Date("2001-01-01 00:00:00")) {
+                                   break;
+                            }
+                            var point = { "quarter": response.dates[date] };
+                            for (var state in response.data) {
+                                   var state_name = response.data[state]['name'];
+                                   if (response.data[state][this.pollutionType] == undefined) {
+                                          point[state_name] = 0;
+                                   } else if (response.data[state][this.pollutionType][response.dates[date]] == undefined) {
+                                          point[state_name] = 0;
+                                   } else {
+                                          point[state_name] = response.data[state][this.pollutionType][response.dates[date]]['max'];
+                                   }
+                            }
+                            data.push(point);
+                     }
+                     console.log(data);
+
+                     // var data = [
+                     // {
+                     // 	"quarter": "2008-Q1",
+                     // 	"ANGEL": 339,
+                     // 	"SERIES-A": 345,
+                     // 	"SERIES-B": 186,
+                     // 	"SERIES-C+": 130,
+                     // 	"VENTURE": 233
+                     // },
+                     // {
+                     // 	"quarter": "2008-Q2",
+                     // 	"ANGEL": 197,
+                     // 	"SERIES-A": 272,
+                     // 	"SERIES-B": 169,
+                     // 	"SERIES-C+": 145,
+                     // 	"VENTURE": 197
+                     // }
+                     // ];
+                     areaChart.draw(data);
+              }
+       }
+});
 
 /***/ })
 /******/ ]);
