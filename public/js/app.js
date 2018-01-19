@@ -43535,6 +43535,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -43653,9 +43655,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				//console.log("updateViewData: Date()");
 				//console.log(this.createDate(this.backendData.dates[dateId]));
 
-				this.firstDate = this.createDate("2015-01-01");
-				this.lastDate = this.createDate("2015-12-01");
-
 				var date = this.createDate(this.backendData.dates[dateId]);
 				if (date >= this.firstDate && date <= this.lastDate) {
 
@@ -43712,7 +43711,9 @@ var render = function() {
       _c("div", { staticClass: "row" }, [_vm._v("Row 1")]),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
-        _c("svg", { attrs: { width: "960", height: "600", id: "areasvg" } })
+        _c("div", { staticClass: "chart-container" }, [
+          _c("svg", { attrs: { width: "960", height: "600", id: "areasvg" } })
+        ])
       ])
     ]),
     _vm._v(" "),

@@ -9,3 +9,11 @@
 .right-aligned {
   float: right;
 }
+
+.chart-container {
+  border-left: 2px;
+  border-right: 2px;
+  border-top: 5px;
+  border-bottom: 5px;
+  padding-left: 30px;
+}

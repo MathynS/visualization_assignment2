@@ -1,4 +1,5 @@
 (function(){
+  //{top: 20, right: 55, bottom: 30, left: 40}
   var margin = {top: 20, right: 55, bottom: 30, left: 40},
       width  = 1000 - margin.left - margin.right,
       height = 500  - margin.top  - margin.bottom;
@@ -48,6 +49,7 @@
     console.log("data: ");
     console.log(data);
 
+    d3.selectAll("svg > *").remove();
     var svg = d3.select("svg");
     //d3.csv("data/crunchbase-quarters.csv", function (error, data) {
     var labelVar = 'quarter';

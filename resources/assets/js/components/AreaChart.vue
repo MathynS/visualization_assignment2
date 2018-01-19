@@ -3,7 +3,9 @@
 		<div class="col-xs-9">
 			<div class="row">Row 1</div>
 			<div class="row">
-			<svg width="960" height="600" id="areasvg"></svg>
+				<div class="chart-container">
+					<svg width="960" height="600" id="areasvg"></svg>
+				</div>
 			</div>
 		</div>
 		<div class="col-xs-3">
