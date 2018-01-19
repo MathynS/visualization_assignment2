@@ -1,6 +1,4 @@
 <template>
-
-
 	<div class="row">
 		<div class="col-xs-9">
 			<div class="row">Row 1</div>
@@ -263,6 +261,10 @@
         data: function(){
             return{
                 data: {},
+								backendData: null,
+								viewData: [],
+								firstDate: null,
+								lastDate: null,
                 pollutionType: 'NO2',
 								selectedStates: [],
 								selectedState: ''
@@ -270,7 +272,8 @@
         },
         mounted() {
         	axios.get('/data/cache/states')
-                .then(response => this.drawChart(response.data))
+								.then(response => this.loadData(response.data))
+                .then(response => this.drawChart())
                 .catch(error => console.log(error))
         },
         methods: {
@@ -278,16 +281,14 @@
 
 					addState(){
 						this.selectedStates.push(this.selectedState);
-						console.log("adding state " + this.selectedState);
+						//console.log("adding state " + this.selectedState);
 						this.selectedState = '';
 						this.refreshChart();
 					},
 
 					refreshChart(){
-
 						// update the list of states to show
 						this.selectedStates = [];
-
 						var checkboxContainer = document.getElementById("us-states-container");
 						var checkboxes = checkboxContainer.getElementsByClassName("form-check-input");
 						for (var i = 0; i < checkboxes.length; i++){
@@ -296,13 +297,9 @@
 							if (isSelected){
 								this.selectedStates.push(state);
 							}
-
 						}
-						//console.log(this.selectedStates);
-
-						axios.get('/data/cache/states')
-                .then(response => this.drawChart(response.data))
-                .catch(error => console.log(error))
+						this.updateViewData();
+						this.drawChart();
 					},
 
 
@@ -315,61 +312,112 @@
 						checkboxMenu = checkboxMenu + "\t<label class=\"form-check-label\" for=\"" + checkboxId + "\">" + state + "</label>\n";
 						checkboxMenu = checkboxMenu + "</div>";
 						return checkboxMenu;
+					},
+
+					selectDefaultDates(dates){
+						var lastYear = 0;
+						var firstMonth = 0;
+						var lastMonth = 0;
+
+						for (var entrie in dates){
+							var date = dates[entrie];
+							var year = Number(date.split("-")[0]);
+							var month = Number(date.split("-")[1]);
+							if (lastYear < year){
+								lastYear = year;
+								firstMonth = 1;
+								lastMonth = 1;
+								if (firstMonth >= month){
+									firstMonth = month;
+									this.firstDate = this.createDate(date);
+								}
+								if (lastMonth <= month){
+									lastMonth = month;
+									this.lastDate = this.createDate(date);
+								}
+							} else if (lastYear == year){
+								if (firstMonth >= month){
+									firstMonth = month;
+									this.firstDate = this.createDate(date);
+								}
+								if (lastMonth <= month){
+									lastMonth = month;
+									this.lastDate = this.createDate(date);
+								}
+							}
+						}
+					},
+
+					loadData(response){
+						//console.log(response);
+						this.selectDefaultDates(response.dates);
+						this.backendData = response;
+						this.updateViewData();
+					},
+
+					createDate(strDate){
+						var dateParts = strDate.split("-");
+						var year = Number(dateParts[0]);
+						var month = Number(dateParts[1]);
+						var day = Number(dateParts[2].split(" ")[0]);
+						var date = new Date();
+						//console.log("createDate->month: " + (month-1));
+						date.setFullYear(year, month-1, day);
+						date.setHours(0);
+						date.setMinutes(0);
+						date.setSeconds(0);
+						date.setMilliseconds(0);
+						return date;
 					}
 					,
-        	drawChart(response) {
-        		console.log(response);
-        		var data = [];
-        		for (var date in response.dates){
-							console.log("**** date: " + date);
-							console.log("**** responses dates");
-        			console.log(response.dates[date]);
-        			if (Date(response.dates[date]) > Date("2001-01-01 00:00:00")) {
-        				break;
-        			}
+					updateViewData(){
+        		this.viewData = [];
+        		for (var dateId in this.backendData.dates){
+							//console.log("updateViewData: Date()");
+							//console.log(this.createDate(this.backendData.dates[dateId]));
 
-        			var point = {"quarter": response.dates[date]};
-							//var stateNames = "";
-        			for (var state in response.data) {
-        				var state_name = response.data[state]['name'];
-								//stateNames = stateNames +"\n" + this.createCheckBoxMenu(state_name);
-								//console.log(state_name);
-								var isStateSelected = this.selectedStates.indexOf(state_name) >= 0;
-								if (isStateSelected){
-									if (response.data[state][this.pollutionType] == undefined) {
-        						point[state_name] = 0;
-        					}
-        					else if (response.data[state][this.pollutionType][response.dates[date]] == undefined) {
-        						point[state_name] = 0;
-        					}
-        					else {
-        						point[state_name] = response.data[state][this.pollutionType][response.dates[date]]['max'];
-        					}
-								}
-	        		}
-	        		data.push(point);
-        		}
-        		console.log(data);
-						//console.log(stateNames);
-        		// var data = [
-        		// {
-        		// 	"quarter": "2008-Q1",
-        		// 	"ANGEL": 339,
-        		// 	"SERIES-A": 345,
-        		// 	"SERIES-B": 186,
-        		// 	"SERIES-C+": 130,
-        		// 	"VENTURE": 233
-        		// },
-        		// {
-        		// 	"quarter": "2008-Q2",
-        		// 	"ANGEL": 197,
-        		// 	"SERIES-A": 272,
-        		// 	"SERIES-B": 169,
-        		// 	"SERIES-C+": 145,
-        		// 	"VENTURE": 197
-        		// }
-	        	// ];
-	        	areaChart.draw(data);
+							var date = this.createDate(this.backendData.dates[dateId]);
+        			if (date >= this.firstDate && date <= this.lastDate) {
+
+								console.log("firstDate: " + this.firstDate);
+								console.log("date: " + date);
+								console.log("lastDate: " + this.lastDate);
+								//c("**** responses dates");
+        				//console.log(this.backendData.dates[dateId]);
+
+        				var point = {"quarter": this.backendData.dates[dateId]};
+								//var stateNames = "";
+        				for (var state in this.backendData.data) {
+        					var state_name = this.backendData.data[state]['name'];
+									//stateNames = stateNames +"\n" + this.createCheckBoxMenu(state_name);
+									//console.log(state_name);
+									var isStateSelected = this.selectedStates.indexOf(state_name) >= 0;
+									if (isStateSelected){
+										if (this.backendData.data[state][this.pollutionType] == undefined) {
+        							point[state_name] = 0;
+        						}
+        						else if (this.backendData.data[state][this.pollutionType][this.backendData.dates[dateId]] == undefined) {
+        							point[state_name] = 0;
+        						}
+        						else {
+        							point[state_name] = this.backendData.data[state][this.pollutionType][this.backendData.dates[dateId]]['max'];
+											//console.log("**** Setting date ****");
+											//console.log(this.backendData.data[state][this.pollutionType][this.backendData.dates[dateId]]);
+        						}
+									}
+	        			}
+	        			this.viewData.push(point);
+        			}
+						}
+        		console.log(this.viewData);
+					},
+
+        	drawChart() {
+						//console.log("this.firstDate: " + this.firstDate);
+						//console.log("this.lastDate: " + this.lastDate);
+						//console.log(typeof this.viewData);
+						console.log(this.viewData);
+	        	areaChart.draw(this.viewData);
         	}
         }
     }

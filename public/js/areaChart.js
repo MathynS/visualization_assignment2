@@ -27,10 +27,10 @@
       .interpolate("cardinal")
       .x(function (d) { return x(d.label) + x.rangeBand() / 2; })
       .y0(function (d) { return y(d.y0); })
-      .y1(function (d) { return y(d.y0 + d.y); });  
+      .y1(function (d) { return y(d.y0 + d.y); });
 
   // var color =   d3.scale.linear()
-  //   .interpolate(d3.interpolateHcl) 
+  //   .interpolate(d3.interpolateHcl)
   //   .range(["#9AF768", "#F27A4D"]);
 
   var color = d3.scale.ordinal()
@@ -44,9 +44,11 @@
 
   var areaChart={};
 
-  areaChart.draw = function(data) { 
-    var svg = d3.select("svg");
+  areaChart.draw = function(data) {
+    console.log("data: ");
     console.log(data);
+
+    var svg = d3.select("svg");
     //d3.csv("data/crunchbase-quarters.csv", function (error, data) {
     var labelVar = 'quarter';
     var varNames = d3.keys(data[0])
@@ -69,7 +71,7 @@
 
     stack(seriesArr);
 
-    y.domain([0, d3.max(seriesArr, function (c) { 
+    y.domain([0, d3.max(seriesArr, function (c) {
         return d3.max(c.values, function (d) { return d.y0 + d.y; });
       })]);
 
@@ -138,7 +140,7 @@
     function removePopovers () {
       $('.popover').each(function() {
         $(this).remove();
-      }); 
+      });
     }
 
     function showPopover (d) {
@@ -148,13 +150,13 @@
         container: 'body',
         trigger: 'manual',
         html : true,
-        content: function() { 
-          return "Quarter: " + d.label + 
+        content: function() {
+          return "Quarter: " + d.label +
                  "<br/>Rounds: " + d3.format(",")(d.value ? d.value: d.y1 - d.y0); }
       });
       $(this).popover('show')
       }
-      
+
   }
   this.areaChart=areaChart;
   console.log(this.areaChart);
