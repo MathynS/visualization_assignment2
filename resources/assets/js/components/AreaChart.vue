@@ -1,7 +1,22 @@
 <template>
 	<div class="row">
 		<div class="col-xs-9">
-			<div class="row">Row 1</div>
+			<div class="row">
+				<div class="col-xs-4">
+						Toggle 1, Toggle 2, Toggle 3, Toggle 4
+				</div>
+				<div>
+    			<div class="row">
+        		<div class='col-sm-3'>
+            	<input type="date" v-model="firstDateFilterStr" v-on:input="updateFirstDateFilter" name="firstDateFilterInput">
+        		</div>
+        		<div class='col-sm-3'>
+            	<input type="date" v-model="lastDateFilterStr" v-on:input="updateLastDateFilter" name="lastDateFilterInput">
+        		</div>
+    			</div>
+				</div>
+
+			</div>
 			<div class="row">
 				<div class="chart-container">
 					<svg width="960" height="600" id="areasvg"></svg>
@@ -9,12 +24,6 @@
 			</div>
 		</div>
 		<div class="col-xs-3">
-
-			<div class="row">
-				<ul>
-				<li v-for="state in selectedStates">{{ state }}</li>
-				</ul>
-			</div>
 
 			<div class="row">
 				<div class="checkbox-container">
@@ -265,8 +274,10 @@
                 data: {},
 								backendData: null,
 								viewData: [],
-								firstDate: null,
-								lastDate: null,
+								firstDateFilter:null,
+								lastDateFilter:null,
+								firstDateFilterStr: '',
+								lastDateFilterStr: '',
                 pollutionType: 'NO2',
 								selectedStates: [],
 								selectedState: ''
@@ -276,7 +287,7 @@
         	axios.get('/data/cache/states')
 								.then(response => this.loadData(response.data))
                 .then(response => this.drawChart())
-                .catch(error => console.log(error))
+                .catch(error => console.log(error));
         },
         methods: {
 
@@ -304,6 +315,17 @@
 						this.drawChart();
 					},
 
+					updateFirstDateFilter(){
+							console.log("updating first date filter");
+							this.firstDateFilter = this.createDate(this.firstDateFilterStr);
+							this.refreshChart();
+					},
+
+					updateLastDateFilter(){
+							console.log("updating last date filter");
+							this.secondDateFilter = this.createDate(this.secondDateFilterStr);
+							this.refreshChart();
+					},
 
 					createCheckBoxMenu(state){
 						var checkboxId = "check" + state.split(" ").join("");
@@ -331,23 +353,25 @@
 								lastMonth = 1;
 								if (firstMonth >= month){
 									firstMonth = month;
-									this.firstDate = this.createDate(date);
+									this.firstDateFilter = this.createDate(date);
 								}
 								if (lastMonth <= month){
 									lastMonth = month;
-									this.lastDate = this.createDate(date);
+									this.lastDateFilter = this.createDate(date);
 								}
 							} else if (lastYear == year){
 								if (firstMonth >= month){
 									firstMonth = month;
-									this.firstDate = this.createDate(date);
+									this.firstDateFiler = this.createDate(date);
 								}
 								if (lastMonth <= month){
 									lastMonth = month;
-									this.lastDate = this.createDate(date);
+									this.lastDateFilter = this.createDate(date);
 								}
 							}
 						}
+						this.firstDateFilterStr = this.createDateStr(this.firstDateFilter);
+						this.lastDateFilterStr = this.createDateStr(this.lastDateFilter);
 					},
 
 					loadData(response){
@@ -370,8 +394,16 @@
 						date.setSeconds(0);
 						date.setMilliseconds(0);
 						return date;
-					}
-					,
+					},
+
+					createDateStr(date){
+						var dateStr = date.getFullYear().toString();
+						dateStr = dateStr + "-" + ('0' + (date.getMonth() + 1).toString()).slice(-2);
+						dateStr = dateStr + "-" + ('0' + date.getDate().toString()).slice(-2);
+						console.log(dateStr);
+						return dateStr;
+					},
+
 					updateViewData(){
         		this.viewData = [];
         		for (var dateId in this.backendData.dates){
@@ -379,11 +411,11 @@
 							//console.log(this.createDate(this.backendData.dates[dateId]));
 
 							var date = this.createDate(this.backendData.dates[dateId]);
-        			if (date >= this.firstDate && date <= this.lastDate) {
+        			if (date >= this.firstDateFilter && date <= this.lastDateFilter) {
 
-								console.log("firstDate: " + this.firstDate);
+								console.log("firstDate: " + this.firstDateFilter);
 								console.log("date: " + date);
-								console.log("lastDate: " + this.lastDate);
+								console.log("lastDateFilter: " + this.lastDateFilter);
 								//c("**** responses dates");
         				//console.log(this.backendData.dates[dateId]);
 
@@ -415,8 +447,8 @@
 					},
 
         	drawChart() {
-						//console.log("this.firstDate: " + this.firstDate);
-						//console.log("this.lastDate: " + this.lastDate);
+						//console.log("this.firstDateFilter: " + this.firstDateFilter);
+						//console.log("this.lastDateFilter: " + this.lastDateFilter);
 						//console.log(typeof this.viewData);
 						console.log(this.viewData);
 	        	areaChart.draw(this.viewData);

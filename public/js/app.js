@@ -43537,6 +43537,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -43545,8 +43554,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			data: {},
 			backendData: null,
 			viewData: [],
-			firstDate: null,
-			lastDate: null,
+			firstDateFilter: null,
+			lastDateFilter: null,
+			firstDateFilterStr: '',
+			lastDateFilterStr: '',
 			pollutionType: 'NO2',
 			selectedStates: [],
 			selectedState: ''
@@ -43586,6 +43597,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.updateViewData();
 			this.drawChart();
 		},
+		updateFirstDateFilter: function updateFirstDateFilter() {
+			console.log("updating first date filter");
+			this.firstDateFilter = this.createDate(this.firstDateFilterStr);
+			this.refreshChart();
+		},
+		updateLastDateFilter: function updateLastDateFilter() {
+			console.log("updating last date filter");
+			this.secondDateFilter = this.createDate(this.secondDateFilterStr);
+			this.refreshChart();
+		},
 		createCheckBoxMenu: function createCheckBoxMenu(state) {
 			var checkboxId = "check" + state.split(" ").join("");
 			var checkboxMenu = "<div class=\"form-check\">\n";
@@ -43611,23 +43632,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					lastMonth = 1;
 					if (firstMonth >= month) {
 						firstMonth = month;
-						this.firstDate = this.createDate(date);
+						this.firstDateFilter = this.createDate(date);
 					}
 					if (lastMonth <= month) {
 						lastMonth = month;
-						this.lastDate = this.createDate(date);
+						this.lastDateFilter = this.createDate(date);
 					}
 				} else if (lastYear == year) {
 					if (firstMonth >= month) {
 						firstMonth = month;
-						this.firstDate = this.createDate(date);
+						this.firstDateFiler = this.createDate(date);
 					}
 					if (lastMonth <= month) {
 						lastMonth = month;
-						this.lastDate = this.createDate(date);
+						this.lastDateFilter = this.createDate(date);
 					}
 				}
 			}
+			this.firstDateFilterStr = this.createDateStr(this.firstDateFilter);
+			this.lastDateFilterStr = this.createDateStr(this.lastDateFilter);
 		},
 		loadData: function loadData(response) {
 			//console.log(response);
@@ -43649,6 +43672,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			date.setMilliseconds(0);
 			return date;
 		},
+		createDateStr: function createDateStr(date) {
+			var dateStr = date.getFullYear().toString();
+			dateStr = dateStr + "-" + ('0' + (date.getMonth() + 1).toString()).slice(-2);
+			dateStr = dateStr + "-" + ('0' + date.getDate().toString()).slice(-2);
+			console.log(dateStr);
+			return dateStr;
+		},
 		updateViewData: function updateViewData() {
 			this.viewData = [];
 			for (var dateId in this.backendData.dates) {
@@ -43656,11 +43686,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				//console.log(this.createDate(this.backendData.dates[dateId]));
 
 				var date = this.createDate(this.backendData.dates[dateId]);
-				if (date >= this.firstDate && date <= this.lastDate) {
+				if (date >= this.firstDateFilter && date <= this.lastDateFilter) {
 
-					console.log("firstDate: " + this.firstDate);
+					console.log("firstDate: " + this.firstDateFilter);
 					console.log("date: " + date);
-					console.log("lastDate: " + this.lastDate);
+					console.log("lastDateFilter: " + this.lastDateFilter);
 					//c("**** responses dates");
 					//console.log(this.backendData.dates[dateId]);
 
@@ -43689,8 +43719,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			console.log(this.viewData);
 		},
 		drawChart: function drawChart() {
-			//console.log("this.firstDate: " + this.firstDate);
-			//console.log("this.lastDate: " + this.lastDate);
+			//console.log("this.firstDateFilter: " + this.firstDateFilter);
+			//console.log("this.lastDateFilter: " + this.lastDateFilter);
 			//console.log(typeof this.viewData);
 			console.log(this.viewData);
 			areaChart.draw(this.viewData);
@@ -43708,7 +43738,69 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-xs-9" }, [
-      _c("div", { staticClass: "row" }, [_vm._v("Row 1")]),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-xs-4" }, [
+          _vm._v(
+            "\n\t\t\t\t\t\tToggle 1, Toggle 2, Toggle 3, Toggle 4\n\t\t\t\t"
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-sm-3" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.firstDateFilterStr,
+                    expression: "firstDateFilterStr"
+                  }
+                ],
+                attrs: { type: "date", name: "firstDateFilterInput" },
+                domProps: { value: _vm.firstDateFilterStr },
+                on: {
+                  input: [
+                    function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.firstDateFilterStr = $event.target.value
+                    },
+                    _vm.updateFirstDateFilter
+                  ]
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-sm-3" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.lastDateFilterStr,
+                    expression: "lastDateFilterStr"
+                  }
+                ],
+                attrs: { type: "date", name: "lastDateFilterInput" },
+                domProps: { value: _vm.lastDateFilterStr },
+                on: {
+                  input: [
+                    function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.lastDateFilterStr = $event.target.value
+                    },
+                    _vm.updateLastDateFilter
+                  ]
+                }
+              })
+            ])
+          ])
+        ])
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "chart-container" }, [
@@ -43718,15 +43810,6 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "col-xs-3" }, [
-      _c("div", { staticClass: "row" }, [
-        _c(
-          "ul",
-          _vm._l(_vm.selectedStates, function(state) {
-            return _c("li", [_vm._v(_vm._s(state))])
-          })
-        )
-      ]),
-      _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "checkbox-container" }, [
           _vm._m(0),
