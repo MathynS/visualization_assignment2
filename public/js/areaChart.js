@@ -1,7 +1,7 @@
 (function(){
   //{top: 20, right: 55, bottom: 30, left: 40}
   var margin = {top: 20, right: 55, bottom: 30, left: 40},
-      width  = 1000 - margin.left - margin.right,
+      width  = 940 - margin.left - margin.right,
       height = 500  - margin.top  - margin.bottom;
 
   var x = d3.scale.ordinal()
@@ -49,19 +49,25 @@
     console.log("data: ");
     console.log(data);
 
+    // remove previous svg image
     d3.selectAll("svg > *").remove();
+
     var svg = d3.select("svg");
     //d3.csv("data/crunchbase-quarters.csv", function (error, data) {
     var labelVar = 'quarter';
     var varNames = d3.keys(data[0])
         .filter(function (key) { return key !== labelVar;});
     color.domain(varNames);
+    console.log(varNames);
+
 
     var seriesArr = [], series = {};
     varNames.forEach(function (name) {
       series[name] = {name: name, values:[]};
       seriesArr.push(series[name]);
     });
+    console.log(seriesArr);
+
 
     data.forEach(function (d) {
       varNames.map(function (name) {
@@ -73,41 +79,64 @@
 
     stack(seriesArr);
 
+    // set height of the graph
     y.domain([0, d3.max(seriesArr, function (c) {
         return d3.max(c.values, function (d) { return d.y0 + d.y; });
       })]);
 
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
 
+    // append x axis into svg figure
     svg.append("g")
-        .attr("class", "y axis")
+        .attr("class", "xaxis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                return "rotate(-65)"
+                });
+
+/*
+    svg.selectAll(".xaxis text")  // select all the text elements for the xaxis
+       .attr("transform", function(d) {
+          return "translate(" + this.getBBox().height*-2 + "," + this.getBBox().height + ")rotate(-45)";
+    });
+*/
+    // append y axis into svg figure
+    svg.append("g")
+        .attr("class", "yaxis")
         .call(yAxis)
       .append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
         .attr("dy", ".71em")
-        .style("text-anchor", "end")
+        .attr("x",0 - (height / 2))
+        .style("text-anchor", "middle")
         .text("Number of Rounds");
 
+    //draw the lines for the series of measurements
     var selection = svg.selectAll(".series")
       .data(seriesArr)
       .enter().append("g")
         .attr("class", "series");
 
+
+      // fill the areas under the series of measurements
     selection.append("path")
       .attr("class", "streamPath")
       .attr("d", function (d) { return area(d.values); })
       .style("fill", function (d) { return color(d.name); })
       .style("stroke", "grey");
 
+      // assign all the data in seriesArray to elements called series points
     var points = svg.selectAll(".seriesPoints")
       .data(seriesArr)
       .enter().append("g")
         .attr("class", "seriesPoints");
 
+      // for each point in series points give its shape
     points.selectAll(".point")
       .data(function (d) { return d.values; })
       .enter().append("circle")
@@ -119,11 +148,12 @@
        .on("mouseover", function (d) { showPopover.call(this, d); })
        .on("mouseout",  function (d) { removePopovers(); })
 
+    // add legend ??
     var legend = svg.selectAll(".legend")
         .data(varNames.slice().reverse())
       .enter().append("g")
         .attr("class", "legend")
-        .attr("transform", function (d, i) { return "translate(55," + i * 20 + ")"; });
+        .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
 
     legend.append("rect")
         .attr("x", width - 10)

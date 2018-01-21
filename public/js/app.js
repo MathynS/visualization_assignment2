@@ -43695,6 +43695,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			date.setMilliseconds(0);
 			return date;
 		},
+		selectCleanedDate: function selectCleanedDate(strDate) {
+			var dateParts = strDate.split("-");
+			return ('0' + dateParts[1]).slice(-2) + "-" + dateParts[0];
+		},
 		createDateStr: function createDateStr(date) {
 			var dateStr = date.getFullYear().toString();
 			dateStr = dateStr + "-" + ('0' + (date.getMonth() + 1).toString()).slice(-2);
@@ -43717,7 +43721,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					//c("**** responses dates");
 					//console.log(this.backendData.dates[dateId]);
 
-					var point = { "quarter": this.backendData.dates[dateId] };
+					var point = { "quarter": this.selectCleanedDate(this.backendData.dates[dateId]) };
 					//var stateNames = "";
 					for (var state in this.backendData.data) {
 						var state_name = this.backendData.data[state]['name'];
@@ -43780,9 +43784,12 @@ var render = function() {
                   attrs: { type: "radio", value: "NO2" },
                   domProps: { checked: _vm._q(_vm.pollutionType, "NO2") },
                   on: {
-                    change: function($event) {
-                      _vm.pollutionType = "NO2"
-                    }
+                    change: [
+                      function($event) {
+                        _vm.pollutionType = "NO2"
+                      },
+                      _vm.refreshChart
+                    ]
                   }
                 }),
                 _vm._v(" "),
@@ -43804,9 +43811,12 @@ var render = function() {
                   attrs: { type: "radio", value: "O3" },
                   domProps: { checked: _vm._q(_vm.pollutionType, "O3") },
                   on: {
-                    change: function($event) {
-                      _vm.pollutionType = "O3"
-                    }
+                    change: [
+                      function($event) {
+                        _vm.pollutionType = "O3"
+                      },
+                      _vm.refreshChart
+                    ]
                   }
                 }),
                 _vm._v(" "),
@@ -43828,9 +43838,12 @@ var render = function() {
                   attrs: { type: "radio", value: "SO2" },
                   domProps: { checked: _vm._q(_vm.pollutionType, "SO2") },
                   on: {
-                    change: function($event) {
-                      _vm.pollutionType = "SO2"
-                    }
+                    change: [
+                      function($event) {
+                        _vm.pollutionType = "SO2"
+                      },
+                      _vm.refreshChart
+                    ]
                   }
                 }),
                 _vm._v(" "),
@@ -43852,9 +43865,12 @@ var render = function() {
                   attrs: { type: "radio", value: "CO" },
                   domProps: { checked: _vm._q(_vm.pollutionType, "CO") },
                   on: {
-                    change: function($event) {
-                      _vm.pollutionType = "CO"
-                    }
+                    change: [
+                      function($event) {
+                        _vm.pollutionType = "CO"
+                      },
+                      _vm.refreshChart
+                    ]
                   }
                 }),
                 _vm._v(" "),

@@ -7,25 +7,25 @@
 					<div class="row">
 	            <span>NO2</span>
 	            <label class="switch">
-	                <input type="radio" v-model="pollutionType" value="NO2">
+	                <input type="radio" v-model="pollutionType" v-on:change="refreshChart" value="NO2">
 	                <span class="checker round"></span>
 	            </label>
 
 							<span>O3</span>
 							<label class="switch">
-									<input type="radio" v-model="pollutionType" value="O3">
+									<input type="radio" v-model="pollutionType" v-on:change="refreshChart" value="O3">
 									<span class="checker round"></span>
 							</label>
 
 							<span>SO2</span>
 	            <label class="switch">
-	                <input type="radio" v-model="pollutionType" value="SO2">
+	                <input type="radio" v-model="pollutionType" v-on:change="refreshChart" value="SO2">
 	                <span class="checker round"></span>
 	            </label>
 
 	            <span>CO</span>
 	            <label class="switch">
-	                <input type="radio" v-model="pollutionType" value="CO">
+	                <input type="radio" v-model="pollutionType" v-on:change="refreshChart" value="CO">
 	                <span class="checker round"></span>
 	            </label>
 	        </div>
@@ -419,6 +419,11 @@
 						return date;
 					},
 
+					selectCleanedDate(strDate){
+						var dateParts = strDate.split("-");
+						return ('0' + dateParts[1]).slice(-2) + "-" + dateParts[0];
+					},
+
 					createDateStr(date){
 						var dateStr = date.getFullYear().toString();
 						dateStr = dateStr + "-" + ('0' + (date.getMonth() + 1).toString()).slice(-2);
@@ -442,7 +447,7 @@
 								//c("**** responses dates");
         				//console.log(this.backendData.dates[dateId]);
 
-        				var point = {"quarter": this.backendData.dates[dateId]};
+        				var point = {"quarter": this.selectCleanedDate(this.backendData.dates[dateId])};
 								//var stateNames = "";
         				for (var state in this.backendData.data) {
         					var state_name = this.backendData.data[state]['name'];
