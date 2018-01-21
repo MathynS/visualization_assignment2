@@ -43546,6 +43546,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -43736,87 +43759,181 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-xs-9" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-xs-4" }, [
-          _vm._v(
-            "\n\t\t\t\t\t\tToggle 1, Toggle 2, Toggle 3, Toggle 4\n\t\t\t\t"
-          )
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-xs-9 vis-column" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-xs-6" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("span", [_vm._v("NO2")]),
+              _vm._v(" "),
+              _c("label", { staticClass: "switch" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.pollutionType,
+                      expression: "pollutionType"
+                    }
+                  ],
+                  attrs: { type: "radio", value: "NO2" },
+                  domProps: { checked: _vm._q(_vm.pollutionType, "NO2") },
+                  on: {
+                    change: function($event) {
+                      _vm.pollutionType = "NO2"
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "checker round" })
+              ]),
+              _vm._v(" "),
+              _c("span", [_vm._v("O3")]),
+              _vm._v(" "),
+              _c("label", { staticClass: "switch" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.pollutionType,
+                      expression: "pollutionType"
+                    }
+                  ],
+                  attrs: { type: "radio", value: "O3" },
+                  domProps: { checked: _vm._q(_vm.pollutionType, "O3") },
+                  on: {
+                    change: function($event) {
+                      _vm.pollutionType = "O3"
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "checker round" })
+              ]),
+              _vm._v(" "),
+              _c("span", [_vm._v("SO2")]),
+              _vm._v(" "),
+              _c("label", { staticClass: "switch" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.pollutionType,
+                      expression: "pollutionType"
+                    }
+                  ],
+                  attrs: { type: "radio", value: "SO2" },
+                  domProps: { checked: _vm._q(_vm.pollutionType, "SO2") },
+                  on: {
+                    change: function($event) {
+                      _vm.pollutionType = "SO2"
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "checker round" })
+              ]),
+              _vm._v(" "),
+              _c("span", [_vm._v("CO")]),
+              _vm._v(" "),
+              _c("label", { staticClass: "switch" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.pollutionType,
+                      expression: "pollutionType"
+                    }
+                  ],
+                  attrs: { type: "radio", value: "CO" },
+                  domProps: { checked: _vm._q(_vm.pollutionType, "CO") },
+                  on: {
+                    change: function($event) {
+                      _vm.pollutionType = "CO"
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "checker round" })
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-xs-6" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-xs-6" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.firstDateFilterStr,
+                      expression: "firstDateFilterStr"
+                    }
+                  ],
+                  attrs: { type: "date", name: "firstDateFilterInput" },
+                  domProps: { value: _vm.firstDateFilterStr },
+                  on: {
+                    input: [
+                      function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.firstDateFilterStr = $event.target.value
+                      },
+                      _vm.updateFirstDateFilter
+                    ]
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-xs-6" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.lastDateFilterStr,
+                      expression: "lastDateFilterStr"
+                    }
+                  ],
+                  attrs: { type: "date", name: "lastDateFilterInput" },
+                  domProps: { value: _vm.lastDateFilterStr },
+                  on: {
+                    input: [
+                      function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.lastDateFilterStr = $event.target.value
+                      },
+                      _vm.updateLastDateFilter
+                    ]
+                  }
+                })
+              ])
+            ])
+          ])
         ]),
         _vm._v(" "),
-        _c("div", [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-sm-3" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.firstDateFilterStr,
-                    expression: "firstDateFilterStr"
-                  }
-                ],
-                attrs: { type: "date", name: "firstDateFilterInput" },
-                domProps: { value: _vm.firstDateFilterStr },
-                on: {
-                  input: [
-                    function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.firstDateFilterStr = $event.target.value
-                    },
-                    _vm.updateFirstDateFilter
-                  ]
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-sm-3" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.lastDateFilterStr,
-                    expression: "lastDateFilterStr"
-                  }
-                ],
-                attrs: { type: "date", name: "lastDateFilterInput" },
-                domProps: { value: _vm.lastDateFilterStr },
-                on: {
-                  input: [
-                    function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.lastDateFilterStr = $event.target.value
-                    },
-                    _vm.updateLastDateFilter
-                  ]
-                }
-              })
-            ])
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "chart-container" }, [
+            _c("svg", { attrs: { width: "840", height: "600", id: "areasvg" } })
           ])
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "chart-container" }, [
-          _c("svg", { attrs: { width: "960", height: "600", id: "areasvg" } })
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "col-xs-3" }, [
-      _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-xs-2 states-column" }, [
         _c("div", { staticClass: "checkbox-container" }, [
           _vm._m(0),
           _vm._v(" "),
           _c(
             "button",
-            { staticClass: "right-aligned", on: { click: _vm.refreshChart } },
+            { staticClass: "left-aligned", on: { click: _vm.refreshChart } },
             [_vm._v("Update chart")]
           )
         ])

@@ -1,16 +1,41 @@
 <template>
-	<div class="row">
-		<div class="col-xs-9">
+	<div class="container">
+		<div class="row">
+		<div class="col-xs-9 vis-column">
 			<div class="row">
-				<div class="col-xs-4">
-						Toggle 1, Toggle 2, Toggle 3, Toggle 4
+				<div class="col-xs-6">
+					<div class="row">
+	            <span>NO2</span>
+	            <label class="switch">
+	                <input type="radio" v-model="pollutionType" value="NO2">
+	                <span class="checker round"></span>
+	            </label>
+
+							<span>O3</span>
+							<label class="switch">
+									<input type="radio" v-model="pollutionType" value="O3">
+									<span class="checker round"></span>
+							</label>
+
+							<span>SO2</span>
+	            <label class="switch">
+	                <input type="radio" v-model="pollutionType" value="SO2">
+	                <span class="checker round"></span>
+	            </label>
+
+	            <span>CO</span>
+	            <label class="switch">
+	                <input type="radio" v-model="pollutionType" value="CO">
+	                <span class="checker round"></span>
+	            </label>
+	        </div>
 				</div>
-				<div>
+				<div class="col-xs-6">
     			<div class="row">
-        		<div class='col-sm-3'>
+        		<div class='col-xs-6'>
             	<input type="date" v-model="firstDateFilterStr" v-on:input="updateFirstDateFilter" name="firstDateFilterInput">
         		</div>
-        		<div class='col-sm-3'>
+        		<div class='col-xs-6'>
             	<input type="date" v-model="lastDateFilterStr" v-on:input="updateLastDateFilter" name="lastDateFilterInput">
         		</div>
     			</div>
@@ -19,15 +44,13 @@
 			</div>
 			<div class="row">
 				<div class="chart-container">
-					<svg width="960" height="600" id="areasvg"></svg>
+					<svg width="840" height="600" id="areasvg"></svg>
 				</div>
 			</div>
 		</div>
-		<div class="col-xs-3">
-
-			<div class="row">
-				<div class="checkbox-container">
-				<div class="dropdown-checkbox" id="us-states-container">
+		<div class="col-xs-2 states-column">
+		<div class="checkbox-container">
+			<div class="dropdown-checkbox" id="us-states-container">
 				<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Armed Forces America" id="checkArmedForcesAmerica">
 					<label class="form-check-label" for="checkArmedForcesAmerica">Armed Forces America</label>
@@ -257,11 +280,11 @@
 					<label class="form-check-label" for="checkWyoming">Wyoming</label>
 				</div>
 				</div>
-				<button class="right-aligned" v-on:click="refreshChart">Update chart</button>
+				<button class="left-aligned" v-on:click="refreshChart">Update chart</button>
 				</div>
-			</div>
-		</div>
 
+		</div>
+	</div>
 	</div>
 
 </template>
