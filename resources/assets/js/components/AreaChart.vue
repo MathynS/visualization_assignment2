@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<div class="row">
-		<div class="col-xs-9 vis-column">
+			<div class="col-xs-9 vis-column">
 			<div class="row">
 				<div class="col-xs-6">
 					<div class="row">
@@ -44,249 +44,259 @@
 			</div>
 			<div class="row">
 				<div class="chart-container">
-					<svg width="840" height="600" id="areasvg"></svg>
+					<svg width="840" height="540" id="areasvg"></svg>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="row">
+						<button type="button" class="btn btn-primary btn-arrow-left" v-on:click="decreaseRangeOfDates">Previous month</button>
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div class="row">
+						<button type="button" class="btn btn-primary btn-arrow-right right-aligned" v-on:click="increaseRangeOfDates">Next month</button>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-xs-2 states-column">
-		<div class="checkbox-container">
-			<div class="dropdown-checkbox" id="us-states-container">
-				<div class="form-check">
+			<div class="col-xs-2 states-column">
+				<div class="checkbox-container">
+					<div class="dropdown-checkbox" id="us-states-container">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Armed Forces America" id="checkArmedForcesAmerica">
 					<label class="form-check-label" for="checkArmedForcesAmerica">Armed Forces America</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Armed Forces" id="checkArmedForces">
 					<label class="form-check-label" for="checkArmedForces">Armed Forces</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Armed Forces Pacific" id="checkArmedForcesPacific">
 					<label class="form-check-label" for="checkArmedForcesPacific">Armed Forces Pacific</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Alaska" id="checkAlaska">
 					<label class="form-check-label" for="checkAlaska">Alaska</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Alabama" id="checkAlabama">
 					<label class="form-check-label" for="checkAlabama">Alabama</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Arkansas" id="checkArkansas">
 					<label class="form-check-label" for="checkArkansas">Arkansas</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Arizona" id="checkArizona">
 					<label class="form-check-label" for="checkArizona">Arizona</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="California" id="checkCalifornia">
 					<label class="form-check-label" for="checkCalifornia">California</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Colorado" id="checkColorado">
 					<label class="form-check-label" for="checkColorado">Colorado</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Connecticut" id="checkConnecticut">
 					<label class="form-check-label" for="checkConnecticut">Connecticut</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Washington" id="checkWashington">
 					<label class="form-check-label" for="checkWashington">Washington</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Delaware" id="checkDelaware">
 					<label class="form-check-label" for="checkDelaware">Delaware</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Florida" id="checkFlorida">
 					<label class="form-check-label" for="checkFlorida">Florida</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Georgia" id="checkGeorgia">
 					<label class="form-check-label" for="checkGeorgia">Georgia</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Guam" id="checkGuam">
 					<label class="form-check-label" for="checkGuam">Guam</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Hawaii" id="checkHawaii">
 					<label class="form-check-label" for="checkHawaii">Hawaii</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Iowa" id="checkIowa">
 					<label class="form-check-label" for="checkIowa">Iowa</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Idaho" id="checkIdaho">
 					<label class="form-check-label" for="checkIdaho">Idaho</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Illinois" id="checkIllinois">
 					<label class="form-check-label" for="checkIllinois">Illinois</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Indiana" id="checkIndiana">
 					<label class="form-check-label" for="checkIndiana">Indiana</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Kansas" id="checkKansas">
 					<label class="form-check-label" for="checkKansas">Kansas</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Kentucky" id="checkKentucky">
 					<label class="form-check-label" for="checkKentucky">Kentucky</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Louisiana" id="checkLouisiana">
 					<label class="form-check-label" for="checkLouisiana">Louisiana</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Massachusetts" id="checkMassachusetts">
 					<label class="form-check-label" for="checkMassachusetts">Massachusetts</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Maryland" id="checkMaryland">
 					<label class="form-check-label" for="checkMaryland">Maryland</label>
 				</div>
-				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Maine" id="checkMaine">
-					<label class="form-check-label" for="checkMaine">Maine</label>
-				</div>
-				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Michigan" id="checkMichigan">
-					<label class="form-check-label" for="checkMichigan">Michigan</label>
-				</div>
-				<div class="form-check">
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="Maine" id="checkMaine">
+							<label class="form-check-label" for="checkMaine">Maine</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="Michigan" id="checkMichigan">
+							<label class="form-check-label" for="checkMichigan">Michigan</label>
+						</div>
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Minnesota" id="checkMinnesota">
 					<label class="form-check-label" for="checkMinnesota">Minnesota</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Missouri" id="checkMissouri">
 					<label class="form-check-label" for="checkMissouri">Missouri</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Mississippi" id="checkMississippi">
 					<label class="form-check-label" for="checkMississippi">Mississippi</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Montana" id="checkMontana">
 					<label class="form-check-label" for="checkMontana">Montana</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="North Carolina" id="checkNorthCarolina">
 					<label class="form-check-label" for="checkNorthCarolina">North Carolina</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="North Dakota" id="checkNorthDakota">
 					<label class="form-check-label" for="checkNorthDakota">North Dakota</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Nebraska" id="checkNebraska">
 					<label class="form-check-label" for="checkNebraska">Nebraska</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="New Hampshire" id="checkNewHampshire">
 					<label class="form-check-label" for="checkNewHampshire">New Hampshire</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="New Jersey" id="checkNewJersey">
 					<label class="form-check-label" for="checkNewJersey">New Jersey</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="New Mexico" id="checkNewMexico">
 					<label class="form-check-label" for="checkNewMexico">New Mexico</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Nevada" id="checkNevada">
 					<label class="form-check-label" for="checkNevada">Nevada</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="New York" id="checkNewYork">
 					<label class="form-check-label" for="checkNewYork">New York</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Ohio" id="checkOhio">
 					<label class="form-check-label" for="checkOhio">Ohio</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Oklahoma" id="checkOklahoma">
 					<label class="form-check-label" for="checkOklahoma">Oklahoma</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Oregon" id="checkOregon">
 					<label class="form-check-label" for="checkOregon">Oregon</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Pennsylvania" id="checkPennsylvania">
 					<label class="form-check-label" for="checkPennsylvania">Pennsylvania</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Puerto Rico" id="checkPuertoRico">
 					<label class="form-check-label" for="checkPuertoRico">Puerto Rico</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Rhode Island" id="checkRhodeIsland">
 					<label class="form-check-label" for="checkRhodeIsland">Rhode Island</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="South Carolina" id="checkSouthCarolina">
 					<label class="form-check-label" for="checkSouthCarolina">South Carolina</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="South Dakota" id="checkSouthDakota">
 					<label class="form-check-label" for="checkSouthDakota">South Dakota</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Tennessee" id="checkTennessee">
 					<label class="form-check-label" for="checkTennessee">Tennessee</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Texas" id="checkTexas">
 					<label class="form-check-label" for="checkTexas">Texas</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Utah" id="checkUtah">
 					<label class="form-check-label" for="checkUtah">Utah</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Virginia" id="checkVirginia">
 					<label class="form-check-label" for="checkVirginia">Virginia</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Virgin Islands" id="checkVirginIslands">
 					<label class="form-check-label" for="checkVirginIslands">Virgin Islands</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Vermont" id="checkVermont">
 					<label class="form-check-label" for="checkVermont">Vermont</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Washington" id="checkWashington">
 					<label class="form-check-label" for="checkWashington">Washington</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="Wisconsin" id="checkWisconsin">
 					<label class="form-check-label" for="checkWisconsin">Wisconsin</label>
 				</div>
-				<div class="form-check">
+						<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="West Virginia" id="checkWestVirginia">
 					<label class="form-check-label" for="checkWestVirginia">West Virginia</label>
 				</div>
-				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Wyoming" id="checkWyoming">
-					<label class="form-check-label" for="checkWyoming">Wyoming</label>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="Wyoming" id="checkWyoming">
+							<label class="form-check-label" for="checkWyoming">Wyoming</label>
+						</div>
+					</div>
+					<button class="left-aligned" v-on:click="refreshChart">Update chart</button>
 				</div>
-				</div>
-				<button class="left-aligned" v-on:click="refreshChart">Update chart</button>
-				</div>
-
+			</div>
 		</div>
 	</div>
-	</div>
-
 </template>
 
 <script>
@@ -297,6 +307,8 @@
                 data: {},
 								backendData: null,
 								viewData: [],
+								firstDateDataset: null,
+								lastDateDataset: null,
 								firstDateFilter:null,
 								lastDateFilter:null,
 								firstDateFilterStr: '',
@@ -346,7 +358,7 @@
 
 					updateLastDateFilter(){
 							console.log("updating last date filter");
-							this.secondDateFilter = this.createDate(this.secondDateFilterStr);
+							this.lastDateFilter = this.createDate(this.lastDateFilterStr);
 							this.refreshChart();
 					},
 
@@ -367,34 +379,143 @@
 						var lastMonth = 0;
 
 						for (var entrie in dates){
-							var date = dates[entrie];
-							var year = Number(date.split("-")[0]);
-							var month = Number(date.split("-")[1]);
+							var dateStr = dates[entrie];
+							var year = Number(dateStr.split("-")[0]);
+							var month = Number(dateStr.split("-")[1]);
+							var date = this.createDate(dateStr);
+
+							if (this.firstDateDataset == null){
+								this.firstDateDataset = date;
+							} else if (date < this.firstDateDataset){
+								this.firstDateDataset = date;
+							}
+
+							if (this.lastDateDataset == null){
+								this.lastDateDataset = date;
+							} else if (date > this.lastDateDataset){
+								this.lastDateDataset = date;
+							}
+
 							if (lastYear < year){
 								lastYear = year;
 								firstMonth = 1;
 								lastMonth = 1;
 								if (firstMonth >= month){
 									firstMonth = month;
-									this.firstDateFilter = this.createDate(date);
+									this.firstDateFilter = date;
 								}
 								if (lastMonth <= month){
 									lastMonth = month;
-									this.lastDateFilter = this.createDate(date);
+									this.lastDateFilter = date;
 								}
 							} else if (lastYear == year){
 								if (firstMonth >= month){
 									firstMonth = month;
-									this.firstDateFiler = this.createDate(date);
+									this.firstDateFiler = date;
 								}
 								if (lastMonth <= month){
 									lastMonth = month;
-									this.lastDateFilter = this.createDate(date);
+									this.lastDateFilter = date;
 								}
 							}
 						}
 						this.firstDateFilterStr = this.createDateStr(this.firstDateFilter);
 						this.lastDateFilterStr = this.createDateStr(this.lastDateFilter);
+					},
+
+					decreaseRangeOfDates(){
+						if (this.firstDateFilter > this.firstDateDataset){
+							// decrease firstDateFilter
+							var year = this.firstDateFilter.getFullYear();
+							var month = this.firstDateFilter.getMonth();
+							var day = 1;
+							if (month <= 0){
+								month = 11;
+								year = year - 1;
+							} else {
+								month = month - 1;
+							}
+							var date = new Date();
+							date.setFullYear(year, month, day);
+							date.setHours(0);
+							date.setMinutes(0);
+							date.setSeconds(0);
+							date.setMilliseconds(0);
+							// update date filters
+							this.firstDateFilter = date;
+							this.firstDateFilterStr = this.createDateStr(date);
+
+							// decrease lastDateFilter
+							var year = this.lastDateFilter.getFullYear();
+							var month = this.lastDateFilter.getMonth();
+							var day = 1;
+							if (month <= 0){
+								month = 11;
+								year = year - 1;
+							} else {
+								month = month - 1;
+							}
+							var date = new Date();
+							date.setFullYear(year, month, day);
+							date.setHours(0);
+							date.setMinutes(0);
+							date.setSeconds(0);
+							date.setMilliseconds(0);
+							// update date filters
+							this.lastDateFilter = date;
+							this.lastDateFilterStr = this.createDateStr(date);
+
+							// refresh chart
+							this.refreshChart();
+						}
+					},
+
+					increaseRangeOfDates(){
+						console.log(this.lastDateDataset);
+						if (this.lastDateFilter < this.lastDateDataset){
+							// increase firstDateFilter
+							var year = this.firstDateFilter.getFullYear();
+							var month = this.firstDateFilter.getMonth();
+							var day = 1;
+							if (month >= 11){
+								month = 0;
+								year = year + 1;
+							} else {
+								month = month + 1;
+							}
+							var date = new Date();
+							date.setFullYear(year, month, day);
+							date.setHours(0);
+							date.setMinutes(0);
+							date.setSeconds(0);
+							date.setMilliseconds(0);
+							// update date filters
+							this.firstDateFilter = date;
+							this.firstDateFilterStr = this.createDateStr(date);
+
+							// increase lastDateFilter
+							var year = this.lastDateFilter.getFullYear();
+							var month = this.lastDateFilter.getMonth();
+							var day = 1;
+							if (month >= 11){
+								month = 0;
+								year = year + 1;
+							} else {
+								month = month + 1;
+							}
+							var date = new Date();
+							date.setFullYear(year, month, day);
+							date.setHours(0);
+							date.setMinutes(0);
+							date.setSeconds(0);
+							date.setMilliseconds(0);
+							// update date filters
+							this.lastDateFilter = date;
+							this.lastDateFilterStr = this.createDateStr(date);
+
+							// refresh chart
+							this.refreshChart();
+						}
 					},
 
 					loadData(response){
@@ -405,6 +526,7 @@
 					},
 
 					createDate(strDate){
+						console.log(strDate);
 						var dateParts = strDate.split("-");
 						var year = Number(dateParts[0]);
 						var month = Number(dateParts[1]);

@@ -43569,6 +43569,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -43577,6 +43587,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			data: {},
 			backendData: null,
 			viewData: [],
+			firstDateDataset: null,
+			lastDateDataset: null,
 			firstDateFilter: null,
 			lastDateFilter: null,
 			firstDateFilterStr: '',
@@ -43627,7 +43639,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 		updateLastDateFilter: function updateLastDateFilter() {
 			console.log("updating last date filter");
-			this.secondDateFilter = this.createDate(this.secondDateFilterStr);
+			this.lastDateFilter = this.createDate(this.lastDateFilterStr);
 			this.refreshChart();
 		},
 		createCheckBoxMenu: function createCheckBoxMenu(state) {
@@ -43646,34 +43658,141 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var lastMonth = 0;
 
 			for (var entrie in dates) {
-				var date = dates[entrie];
-				var year = Number(date.split("-")[0]);
-				var month = Number(date.split("-")[1]);
+				var dateStr = dates[entrie];
+				var year = Number(dateStr.split("-")[0]);
+				var month = Number(dateStr.split("-")[1]);
+				var date = this.createDate(dateStr);
+
+				if (this.firstDateDataset == null) {
+					this.firstDateDataset = date;
+				} else if (date < this.firstDateDataset) {
+					this.firstDateDataset = date;
+				}
+
+				if (this.lastDateDataset == null) {
+					this.lastDateDataset = date;
+				} else if (date > this.lastDateDataset) {
+					this.lastDateDataset = date;
+				}
+
 				if (lastYear < year) {
 					lastYear = year;
 					firstMonth = 1;
 					lastMonth = 1;
 					if (firstMonth >= month) {
 						firstMonth = month;
-						this.firstDateFilter = this.createDate(date);
+						this.firstDateFilter = date;
 					}
 					if (lastMonth <= month) {
 						lastMonth = month;
-						this.lastDateFilter = this.createDate(date);
+						this.lastDateFilter = date;
 					}
 				} else if (lastYear == year) {
 					if (firstMonth >= month) {
 						firstMonth = month;
-						this.firstDateFiler = this.createDate(date);
+						this.firstDateFiler = date;
 					}
 					if (lastMonth <= month) {
 						lastMonth = month;
-						this.lastDateFilter = this.createDate(date);
+						this.lastDateFilter = date;
 					}
 				}
 			}
 			this.firstDateFilterStr = this.createDateStr(this.firstDateFilter);
 			this.lastDateFilterStr = this.createDateStr(this.lastDateFilter);
+		},
+		decreaseRangeOfDates: function decreaseRangeOfDates() {
+			if (this.firstDateFilter > this.firstDateDataset) {
+				// decrease firstDateFilter
+				var year = this.firstDateFilter.getFullYear();
+				var month = this.firstDateFilter.getMonth();
+				var day = 1;
+				if (month <= 0) {
+					month = 11;
+					year = year - 1;
+				} else {
+					month = month - 1;
+				}
+				var date = new Date();
+				date.setFullYear(year, month, day);
+				date.setHours(0);
+				date.setMinutes(0);
+				date.setSeconds(0);
+				date.setMilliseconds(0);
+				// update date filters
+				this.firstDateFilter = date;
+				this.firstDateFilterStr = this.createDateStr(date);
+
+				// decrease lastDateFilter
+				var year = this.lastDateFilter.getFullYear();
+				var month = this.lastDateFilter.getMonth();
+				var day = 1;
+				if (month <= 0) {
+					month = 11;
+					year = year - 1;
+				} else {
+					month = month - 1;
+				}
+				var date = new Date();
+				date.setFullYear(year, month, day);
+				date.setHours(0);
+				date.setMinutes(0);
+				date.setSeconds(0);
+				date.setMilliseconds(0);
+				// update date filters
+				this.lastDateFilter = date;
+				this.lastDateFilterStr = this.createDateStr(date);
+
+				// refresh chart
+				this.refreshChart();
+			}
+		},
+		increaseRangeOfDates: function increaseRangeOfDates() {
+			console.log(this.lastDateDataset);
+			if (this.lastDateFilter < this.lastDateDataset) {
+				// increase firstDateFilter
+				var year = this.firstDateFilter.getFullYear();
+				var month = this.firstDateFilter.getMonth();
+				var day = 1;
+				if (month >= 11) {
+					month = 0;
+					year = year + 1;
+				} else {
+					month = month + 1;
+				}
+				var date = new Date();
+				date.setFullYear(year, month, day);
+				date.setHours(0);
+				date.setMinutes(0);
+				date.setSeconds(0);
+				date.setMilliseconds(0);
+				// update date filters
+				this.firstDateFilter = date;
+				this.firstDateFilterStr = this.createDateStr(date);
+
+				// increase lastDateFilter
+				var year = this.lastDateFilter.getFullYear();
+				var month = this.lastDateFilter.getMonth();
+				var day = 1;
+				if (month >= 11) {
+					month = 0;
+					year = year + 1;
+				} else {
+					month = month + 1;
+				}
+				var date = new Date();
+				date.setFullYear(year, month, day);
+				date.setHours(0);
+				date.setMinutes(0);
+				date.setSeconds(0);
+				date.setMilliseconds(0);
+				// update date filters
+				this.lastDateFilter = date;
+				this.lastDateFilterStr = this.createDateStr(date);
+
+				// refresh chart
+				this.refreshChart();
+			}
 		},
 		loadData: function loadData(response) {
 			//console.log(response);
@@ -43682,6 +43801,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.updateViewData();
 		},
 		createDate: function createDate(strDate) {
+			console.log(strDate);
 			var dateParts = strDate.split("-");
 			var year = Number(dateParts[0]);
 			var month = Number(dateParts[1]);
@@ -43938,7 +44058,37 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "chart-container" }, [
-            _c("svg", { attrs: { width: "840", height: "600", id: "areasvg" } })
+            _c("svg", { attrs: { width: "840", height: "540", id: "areasvg" } })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-xs-6" }, [
+            _c("div", { staticClass: "row" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary btn-arrow-left",
+                  attrs: { type: "button" },
+                  on: { click: _vm.decreaseRangeOfDates }
+                },
+                [_vm._v("Previous month")]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-xs-6" }, [
+            _c("div", { staticClass: "row" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary btn-arrow-right right-aligned",
+                  attrs: { type: "button" },
+                  on: { click: _vm.increaseRangeOfDates }
+                },
+                [_vm._v("Next month")]
+              )
+            ])
           ])
         ])
       ]),
