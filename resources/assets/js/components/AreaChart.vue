@@ -64,235 +64,234 @@
 				<div class="checkbox-container">
 					<div class="dropdown-checkbox" id="us-states-container">
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Armed Forces America" id="checkArmedForcesAmerica">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Armed Forces America" id="checkArmedForcesAmerica">
 					<label class="form-check-label" for="checkArmedForcesAmerica">Armed Forces America</label>
 				</div>
-						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Armed Forces" id="checkArmedForces">
+					<div class="form-check">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Armed Forces" id="checkArmedForces">
 					<label class="form-check-label" for="checkArmedForces">Armed Forces</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Armed Forces Pacific" id="checkArmedForcesPacific">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Armed Forces Pacific" id="checkArmedForcesPacific">
 					<label class="form-check-label" for="checkArmedForcesPacific">Armed Forces Pacific</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Alaska" id="checkAlaska">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Alaska" id="checkAlaska">
 					<label class="form-check-label" for="checkAlaska">Alaska</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Alabama" id="checkAlabama">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Alabama" id="checkAlabama">
 					<label class="form-check-label" for="checkAlabama">Alabama</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Arkansas" id="checkArkansas">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Arkansas" id="checkArkansas">
 					<label class="form-check-label" for="checkArkansas">Arkansas</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Arizona" id="checkArizona">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Arizona" id="checkArizona">
 					<label class="form-check-label" for="checkArizona">Arizona</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="California" id="checkCalifornia">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="California" id="checkCalifornia">
 					<label class="form-check-label" for="checkCalifornia">California</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Colorado" id="checkColorado">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Colorado" id="checkColorado">
 					<label class="form-check-label" for="checkColorado">Colorado</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Connecticut" id="checkConnecticut">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Connecticut" id="checkConnecticut">
 					<label class="form-check-label" for="checkConnecticut">Connecticut</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Washington" id="checkWashington">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Washington" id="checkWashington">
 					<label class="form-check-label" for="checkWashington">Washington</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Delaware" id="checkDelaware">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Delaware" id="checkDelaware">
 					<label class="form-check-label" for="checkDelaware">Delaware</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Florida" id="checkFlorida">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Florida" id="checkFlorida">
 					<label class="form-check-label" for="checkFlorida">Florida</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Georgia" id="checkGeorgia">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Georgia" id="checkGeorgia">
 					<label class="form-check-label" for="checkGeorgia">Georgia</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Guam" id="checkGuam">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Guam" id="checkGuam">
 					<label class="form-check-label" for="checkGuam">Guam</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Hawaii" id="checkHawaii">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Hawaii" id="checkHawaii">
 					<label class="form-check-label" for="checkHawaii">Hawaii</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Iowa" id="checkIowa">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Iowa" id="checkIowa">
 					<label class="form-check-label" for="checkIowa">Iowa</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Idaho" id="checkIdaho">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Idaho" id="checkIdaho">
 					<label class="form-check-label" for="checkIdaho">Idaho</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Illinois" id="checkIllinois">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Illinois" id="checkIllinois">
 					<label class="form-check-label" for="checkIllinois">Illinois</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Indiana" id="checkIndiana">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Indiana" id="checkIndiana">
 					<label class="form-check-label" for="checkIndiana">Indiana</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Kansas" id="checkKansas">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Kansas" id="checkKansas">
 					<label class="form-check-label" for="checkKansas">Kansas</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Kentucky" id="checkKentucky">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Kentucky" id="checkKentucky">
 					<label class="form-check-label" for="checkKentucky">Kentucky</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Louisiana" id="checkLouisiana">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Louisiana" id="checkLouisiana">
 					<label class="form-check-label" for="checkLouisiana">Louisiana</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Massachusetts" id="checkMassachusetts">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Massachusetts" id="checkMassachusetts">
 					<label class="form-check-label" for="checkMassachusetts">Massachusetts</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Maryland" id="checkMaryland">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Maryland" id="checkMaryland">
 					<label class="form-check-label" for="checkMaryland">Maryland</label>
 				</div>
 						<div class="form-check">
-							<input class="form-check-input" type="checkbox" value="Maine" id="checkMaine">
+							<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Maine" id="checkMaine">
 							<label class="form-check-label" for="checkMaine">Maine</label>
 						</div>
 						<div class="form-check">
-							<input class="form-check-input" type="checkbox" value="Michigan" id="checkMichigan">
+							<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Michigan" id="checkMichigan">
 							<label class="form-check-label" for="checkMichigan">Michigan</label>
 						</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Minnesota" id="checkMinnesota">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Minnesota" id="checkMinnesota">
 					<label class="form-check-label" for="checkMinnesota">Minnesota</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Missouri" id="checkMissouri">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Missouri" id="checkMissouri">
 					<label class="form-check-label" for="checkMissouri">Missouri</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Mississippi" id="checkMississippi">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Mississippi" id="checkMississippi">
 					<label class="form-check-label" for="checkMississippi">Mississippi</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Montana" id="checkMontana">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Montana" id="checkMontana">
 					<label class="form-check-label" for="checkMontana">Montana</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="North Carolina" id="checkNorthCarolina">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="North Carolina" id="checkNorthCarolina">
 					<label class="form-check-label" for="checkNorthCarolina">North Carolina</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="North Dakota" id="checkNorthDakota">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="North Dakota" id="checkNorthDakota">
 					<label class="form-check-label" for="checkNorthDakota">North Dakota</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Nebraska" id="checkNebraska">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Nebraska" id="checkNebraska">
 					<label class="form-check-label" for="checkNebraska">Nebraska</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="New Hampshire" id="checkNewHampshire">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="New Hampshire" id="checkNewHampshire">
 					<label class="form-check-label" for="checkNewHampshire">New Hampshire</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="New Jersey" id="checkNewJersey">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="New Jersey" id="checkNewJersey">
 					<label class="form-check-label" for="checkNewJersey">New Jersey</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="New Mexico" id="checkNewMexico">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="New Mexico" id="checkNewMexico">
 					<label class="form-check-label" for="checkNewMexico">New Mexico</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Nevada" id="checkNevada">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Nevada" id="checkNevada">
 					<label class="form-check-label" for="checkNevada">Nevada</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="New York" id="checkNewYork">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="New York" id="checkNewYork">
 					<label class="form-check-label" for="checkNewYork">New York</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Ohio" id="checkOhio">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Ohio" id="checkOhio">
 					<label class="form-check-label" for="checkOhio">Ohio</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Oklahoma" id="checkOklahoma">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Oklahoma" id="checkOklahoma">
 					<label class="form-check-label" for="checkOklahoma">Oklahoma</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Oregon" id="checkOregon">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Oregon" id="checkOregon">
 					<label class="form-check-label" for="checkOregon">Oregon</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Pennsylvania" id="checkPennsylvania">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Pennsylvania" id="checkPennsylvania">
 					<label class="form-check-label" for="checkPennsylvania">Pennsylvania</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Puerto Rico" id="checkPuertoRico">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Puerto Rico" id="checkPuertoRico">
 					<label class="form-check-label" for="checkPuertoRico">Puerto Rico</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Rhode Island" id="checkRhodeIsland">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Rhode Island" id="checkRhodeIsland">
 					<label class="form-check-label" for="checkRhodeIsland">Rhode Island</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="South Carolina" id="checkSouthCarolina">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="South Carolina" id="checkSouthCarolina">
 					<label class="form-check-label" for="checkSouthCarolina">South Carolina</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="South Dakota" id="checkSouthDakota">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="South Dakota" id="checkSouthDakota">
 					<label class="form-check-label" for="checkSouthDakota">South Dakota</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Tennessee" id="checkTennessee">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Tennessee" id="checkTennessee">
 					<label class="form-check-label" for="checkTennessee">Tennessee</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Texas" id="checkTexas">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Texas" id="checkTexas">
 					<label class="form-check-label" for="checkTexas">Texas</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Utah" id="checkUtah">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Utah" id="checkUtah">
 					<label class="form-check-label" for="checkUtah">Utah</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Virginia" id="checkVirginia">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Virginia" id="checkVirginia">
 					<label class="form-check-label" for="checkVirginia">Virginia</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Virgin Islands" id="checkVirginIslands">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Virgin Islands" id="checkVirginIslands">
 					<label class="form-check-label" for="checkVirginIslands">Virgin Islands</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Vermont" id="checkVermont">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Vermont" id="checkVermont">
 					<label class="form-check-label" for="checkVermont">Vermont</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Washington" id="checkWashington">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Washington" id="checkWashington">
 					<label class="form-check-label" for="checkWashington">Washington</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="Wisconsin" id="checkWisconsin">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Wisconsin" id="checkWisconsin">
 					<label class="form-check-label" for="checkWisconsin">Wisconsin</label>
 				</div>
 						<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="West Virginia" id="checkWestVirginia">
+					<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="West Virginia" id="checkWestVirginia">
 					<label class="form-check-label" for="checkWestVirginia">West Virginia</label>
 				</div>
 						<div class="form-check">
-							<input class="form-check-input" type="checkbox" value="Wyoming" id="checkWyoming">
+							<input class="form-check-input" type="checkbox" v-on:change="refreshChart" value="Wyoming" id="checkWyoming">
 							<label class="form-check-label" for="checkWyoming">Wyoming</label>
 						</div>
 					</div>
-					<button class="left-aligned" v-on:click="refreshChart">Update chart</button>
 				</div>
 			</div>
 		</div>
@@ -315,7 +314,9 @@
 								lastDateFilterStr: '',
                 pollutionType: 'NO2',
 								selectedStates: [],
-								selectedState: ''
+								selectedState: '',
+								statType: 'max',
+								averagedData: []
             }
         },
         mounted() {
@@ -554,6 +555,70 @@
 						return dateStr;
 					},
 
+					// compute a 5 month moving average
+					computeMovingAverage(state){
+						// lets work over the view data
+						this.averagedData = [];
+						var tempAveragedData = [];
+
+						//console.log("*** compute moving average ***");
+						for (var stateId in this.selectedStates){
+							var state = this.selectedStates[stateId];
+							console.log("*** computing moving average for " + state);
+							var dataToAverage = [];
+							var dates = [];
+							var firstElement = true;
+							var pollutionValue;
+							// iterate over the dates for an element of the viewData
+							var entrieCounter = 0;
+							for (var entrie in this.viewData){
+								var date = this.viewData[entrie]["quarter"];
+								pollutionValue = this.viewData[entrie][state];
+								console.log(pollutionValue);
+
+								// add first two elements to perform the moving average
+								if (firstElement == true){
+									dataToAverage.push(pollutionValue);
+									dataToAverage.push(pollutionValue);
+									firstElement = false;
+								}
+								dataToAverage.push(pollutionValue);
+								dates.push(date);
+								entrieCounter += 1;
+								console.log("dataToAverage.length " + dataToAverage.length);
+								console.log("entrieCounter.length " + entrieCounter);
+							}
+
+							// add last two elements to perform the moving average
+							dataToAverage.push(pollutionValue);
+							dataToAverage.push(pollutionValue);
+
+							//var dateCounter = 0;
+							for (var i = 2; i < dataToAverage.length - 2; i++){
+									var averagedValue = (0.125*dataToAverage[i-2]) + (0.25**dataToAverage[i-1]) + (0.25*dataToAverage[i]);
+									averagedValue = averagedValue + (0.25*dataToAverage[i+1]) + (0.125*dataToAverage[i+2]);
+									var point = {"quarter": dates[i-2]};
+
+									var indexOfEntry = -1;
+									for (var entryId in this.averagedData){
+										var entry = this.averagedData[entryId];
+										if (entry["quarter"] == dates[i-2]){
+												point = entry;
+												indexOfEntry = this.averagedData.indexOf(entry);
+												break;
+										}
+									}
+									point[state]= averagedValue;
+									if (indexOfEntry >= 0){
+										this.averagedData[indexOfEntry] = point;
+									} else {
+										this.averagedData.push(point);
+									}
+							}
+						}
+
+					},
+
 					updateViewData(){
         		this.viewData = [];
         		for (var dateId in this.backendData.dates){
@@ -596,10 +661,12 @@
         		console.log(this.viewData);
 					},
 
+
         	drawChart() {
 						//console.log("this.firstDateFilter: " + this.firstDateFilter);
 						//console.log("this.lastDateFilter: " + this.lastDateFilter);
 						//console.log(typeof this.viewData);
+						this.computeMovingAverage('LA');
 						console.log(this.viewData);
 	        	areaChart.draw(this.viewData);
         	}

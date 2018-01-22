@@ -43578,7 +43578,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -43595,7 +43594,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			lastDateFilterStr: '',
 			pollutionType: 'NO2',
 			selectedStates: [],
-			selectedState: ''
+			selectedState: '',
+			statType: 'max',
+			averagedData: []
 		};
 	},
 	mounted: function mounted() {
@@ -43826,6 +43827,70 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			console.log(dateStr);
 			return dateStr;
 		},
+
+
+		// compute a 5 month moving average
+		computeMovingAverage: function computeMovingAverage(state) {
+			// lets work over the view data
+			this.averagedData = [];
+			var tempAveragedData = [];
+
+			//console.log("*** compute moving average ***");
+			for (var stateId in this.selectedStates) {
+				var state = this.selectedStates[stateId];
+				console.log("*** computing moving average for " + state);
+				var dataToAverage = [];
+				var dates = [];
+				var firstElement = true;
+				var pollutionValue;
+				// iterate over the dates for an element of the viewData
+				var entrieCounter = 0;
+				for (var entrie in this.viewData) {
+					var date = this.viewData[entrie]["quarter"];
+					pollutionValue = this.viewData[entrie][state];
+					console.log(pollutionValue);
+
+					// add first two elements to perform the moving average
+					if (firstElement == true) {
+						dataToAverage.push(pollutionValue);
+						dataToAverage.push(pollutionValue);
+						firstElement = false;
+					}
+					dataToAverage.push(pollutionValue);
+					dates.push(date);
+					entrieCounter += 1;
+					console.log("dataToAverage.length " + dataToAverage.length);
+					console.log("entrieCounter.length " + entrieCounter);
+				}
+
+				// add last two elements to perform the moving average
+				dataToAverage.push(pollutionValue);
+				dataToAverage.push(pollutionValue);
+
+				//var dateCounter = 0;
+				for (var i = 2; i < dataToAverage.length - 2; i++) {
+					var averagedValue = 0.125 * dataToAverage[i - 2] + Math.pow(0.25, dataToAverage[i - 1]) + 0.25 * dataToAverage[i];
+					averagedValue = averagedValue + 0.25 * dataToAverage[i + 1] + 0.125 * dataToAverage[i + 2];
+					var point = { "quarter": dates[i - 2] };
+
+					var indexOfEntry = -1;
+					for (var entryId in this.averagedData) {
+						var entry = this.averagedData[entryId];
+						if (entry["quarter"] == dates[i - 2]) {
+							point = entry;
+							indexOfEntry = this.averagedData.indexOf(entry);
+							break;
+						}
+					}
+					point[state] = averagedValue;
+					if (indexOfEntry >= 0) {
+						this.averagedData[indexOfEntry] = point;
+					} else {
+						this.averagedData.push(point);
+					}
+				}
+			}
+		},
 		updateViewData: function updateViewData() {
 			this.viewData = [];
 			for (var dateId in this.backendData.dates) {
@@ -43869,6 +43934,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			//console.log("this.firstDateFilter: " + this.firstDateFilter);
 			//console.log("this.lastDateFilter: " + this.lastDateFilter);
 			//console.log(typeof this.viewData);
+			this.computeMovingAverage('LA');
 			console.log(this.viewData);
 			areaChart.draw(this.viewData);
 		}
@@ -44095,982 +44161,1189 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "col-xs-2 states-column" }, [
         _c("div", { staticClass: "checkbox-container" }, [
-          _vm._m(0),
-          _vm._v(" "),
           _c(
-            "button",
-            { staticClass: "left-aligned", on: { click: _vm.refreshChart } },
-            [_vm._v("Update chart")]
+            "div",
+            {
+              staticClass: "dropdown-checkbox",
+              attrs: { id: "us-states-container" }
+            },
+            [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Armed Forces America",
+                    id: "checkArmedForcesAmerica"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkArmedForcesAmerica" }
+                  },
+                  [_vm._v("Armed Forces America")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Armed Forces",
+                    id: "checkArmedForces"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkArmedForces" }
+                  },
+                  [_vm._v("Armed Forces")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Armed Forces Pacific",
+                    id: "checkArmedForcesPacific"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkArmedForcesPacific" }
+                  },
+                  [_vm._v("Armed Forces Pacific")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Alaska",
+                    id: "checkAlaska"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkAlaska" }
+                  },
+                  [_vm._v("Alaska")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Alabama",
+                    id: "checkAlabama"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkAlabama" }
+                  },
+                  [_vm._v("Alabama")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Arkansas",
+                    id: "checkArkansas"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkArkansas" }
+                  },
+                  [_vm._v("Arkansas")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Arizona",
+                    id: "checkArizona"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkArizona" }
+                  },
+                  [_vm._v("Arizona")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "California",
+                    id: "checkCalifornia"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkCalifornia" }
+                  },
+                  [_vm._v("California")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Colorado",
+                    id: "checkColorado"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkColorado" }
+                  },
+                  [_vm._v("Colorado")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Connecticut",
+                    id: "checkConnecticut"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkConnecticut" }
+                  },
+                  [_vm._v("Connecticut")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Washington",
+                    id: "checkWashington"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkWashington" }
+                  },
+                  [_vm._v("Washington")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Delaware",
+                    id: "checkDelaware"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkDelaware" }
+                  },
+                  [_vm._v("Delaware")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Florida",
+                    id: "checkFlorida"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkFlorida" }
+                  },
+                  [_vm._v("Florida")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Georgia",
+                    id: "checkGeorgia"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkGeorgia" }
+                  },
+                  [_vm._v("Georgia")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", value: "Guam", id: "checkGuam" },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkGuam" }
+                  },
+                  [_vm._v("Guam")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Hawaii",
+                    id: "checkHawaii"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkHawaii" }
+                  },
+                  [_vm._v("Hawaii")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", value: "Iowa", id: "checkIowa" },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkIowa" }
+                  },
+                  [_vm._v("Iowa")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", value: "Idaho", id: "checkIdaho" },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkIdaho" }
+                  },
+                  [_vm._v("Idaho")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Illinois",
+                    id: "checkIllinois"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkIllinois" }
+                  },
+                  [_vm._v("Illinois")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Indiana",
+                    id: "checkIndiana"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkIndiana" }
+                  },
+                  [_vm._v("Indiana")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Kansas",
+                    id: "checkKansas"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkKansas" }
+                  },
+                  [_vm._v("Kansas")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Kentucky",
+                    id: "checkKentucky"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkKentucky" }
+                  },
+                  [_vm._v("Kentucky")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Louisiana",
+                    id: "checkLouisiana"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkLouisiana" }
+                  },
+                  [_vm._v("Louisiana")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Massachusetts",
+                    id: "checkMassachusetts"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkMassachusetts" }
+                  },
+                  [_vm._v("Massachusetts")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Maryland",
+                    id: "checkMaryland"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkMaryland" }
+                  },
+                  [_vm._v("Maryland")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", value: "Maine", id: "checkMaine" },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkMaine" }
+                  },
+                  [_vm._v("Maine")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Michigan",
+                    id: "checkMichigan"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkMichigan" }
+                  },
+                  [_vm._v("Michigan")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Minnesota",
+                    id: "checkMinnesota"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkMinnesota" }
+                  },
+                  [_vm._v("Minnesota")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Missouri",
+                    id: "checkMissouri"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkMissouri" }
+                  },
+                  [_vm._v("Missouri")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Mississippi",
+                    id: "checkMississippi"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkMississippi" }
+                  },
+                  [_vm._v("Mississippi")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Montana",
+                    id: "checkMontana"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkMontana" }
+                  },
+                  [_vm._v("Montana")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "North Carolina",
+                    id: "checkNorthCarolina"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkNorthCarolina" }
+                  },
+                  [_vm._v("North Carolina")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "North Dakota",
+                    id: "checkNorthDakota"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkNorthDakota" }
+                  },
+                  [_vm._v("North Dakota")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Nebraska",
+                    id: "checkNebraska"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkNebraska" }
+                  },
+                  [_vm._v("Nebraska")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "New Hampshire",
+                    id: "checkNewHampshire"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkNewHampshire" }
+                  },
+                  [_vm._v("New Hampshire")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "New Jersey",
+                    id: "checkNewJersey"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkNewJersey" }
+                  },
+                  [_vm._v("New Jersey")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "New Mexico",
+                    id: "checkNewMexico"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkNewMexico" }
+                  },
+                  [_vm._v("New Mexico")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Nevada",
+                    id: "checkNevada"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkNevada" }
+                  },
+                  [_vm._v("Nevada")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "New York",
+                    id: "checkNewYork"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkNewYork" }
+                  },
+                  [_vm._v("New York")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", value: "Ohio", id: "checkOhio" },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkOhio" }
+                  },
+                  [_vm._v("Ohio")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Oklahoma",
+                    id: "checkOklahoma"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkOklahoma" }
+                  },
+                  [_vm._v("Oklahoma")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Oregon",
+                    id: "checkOregon"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkOregon" }
+                  },
+                  [_vm._v("Oregon")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Pennsylvania",
+                    id: "checkPennsylvania"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkPennsylvania" }
+                  },
+                  [_vm._v("Pennsylvania")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Puerto Rico",
+                    id: "checkPuertoRico"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkPuertoRico" }
+                  },
+                  [_vm._v("Puerto Rico")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Rhode Island",
+                    id: "checkRhodeIsland"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkRhodeIsland" }
+                  },
+                  [_vm._v("Rhode Island")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "South Carolina",
+                    id: "checkSouthCarolina"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkSouthCarolina" }
+                  },
+                  [_vm._v("South Carolina")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "South Dakota",
+                    id: "checkSouthDakota"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkSouthDakota" }
+                  },
+                  [_vm._v("South Dakota")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Tennessee",
+                    id: "checkTennessee"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkTennessee" }
+                  },
+                  [_vm._v("Tennessee")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", value: "Texas", id: "checkTexas" },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkTexas" }
+                  },
+                  [_vm._v("Texas")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", value: "Utah", id: "checkUtah" },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkUtah" }
+                  },
+                  [_vm._v("Utah")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Virginia",
+                    id: "checkVirginia"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkVirginia" }
+                  },
+                  [_vm._v("Virginia")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Virgin Islands",
+                    id: "checkVirginIslands"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkVirginIslands" }
+                  },
+                  [_vm._v("Virgin Islands")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Vermont",
+                    id: "checkVermont"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkVermont" }
+                  },
+                  [_vm._v("Vermont")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Washington",
+                    id: "checkWashington"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkWashington" }
+                  },
+                  [_vm._v("Washington")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Wisconsin",
+                    id: "checkWisconsin"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkWisconsin" }
+                  },
+                  [_vm._v("Wisconsin")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "West Virginia",
+                    id: "checkWestVirginia"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkWestVirginia" }
+                  },
+                  [_vm._v("West Virginia")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "Wyoming",
+                    id: "checkWyoming"
+                  },
+                  on: { change: _vm.refreshChart }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "checkWyoming" }
+                  },
+                  [_vm._v("Wyoming")]
+                )
+              ])
+            ]
           )
         ])
       ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "dropdown-checkbox",
-        attrs: { id: "us-states-container" }
-      },
-      [
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Armed Forces America",
-              id: "checkArmedForcesAmerica"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkArmedForcesAmerica" }
-            },
-            [_vm._v("Armed Forces America")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Armed Forces",
-              id: "checkArmedForces"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkArmedForces" }
-            },
-            [_vm._v("Armed Forces")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Armed Forces Pacific",
-              id: "checkArmedForcesPacific"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkArmedForcesPacific" }
-            },
-            [_vm._v("Armed Forces Pacific")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Alaska", id: "checkAlaska" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkAlaska" } },
-            [_vm._v("Alaska")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Alabama", id: "checkAlabama" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkAlabama" } },
-            [_vm._v("Alabama")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Arkansas", id: "checkArkansas" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkArkansas" }
-            },
-            [_vm._v("Arkansas")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Arizona", id: "checkArizona" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkArizona" } },
-            [_vm._v("Arizona")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "California",
-              id: "checkCalifornia"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkCalifornia" }
-            },
-            [_vm._v("California")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Colorado", id: "checkColorado" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkColorado" }
-            },
-            [_vm._v("Colorado")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Connecticut",
-              id: "checkConnecticut"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkConnecticut" }
-            },
-            [_vm._v("Connecticut")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Washington",
-              id: "checkWashington"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkWashington" }
-            },
-            [_vm._v("Washington")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Delaware", id: "checkDelaware" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkDelaware" }
-            },
-            [_vm._v("Delaware")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Florida", id: "checkFlorida" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkFlorida" } },
-            [_vm._v("Florida")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Georgia", id: "checkGeorgia" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkGeorgia" } },
-            [_vm._v("Georgia")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Guam", id: "checkGuam" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkGuam" } },
-            [_vm._v("Guam")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Hawaii", id: "checkHawaii" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkHawaii" } },
-            [_vm._v("Hawaii")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Iowa", id: "checkIowa" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkIowa" } },
-            [_vm._v("Iowa")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Idaho", id: "checkIdaho" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkIdaho" } },
-            [_vm._v("Idaho")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Illinois", id: "checkIllinois" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkIllinois" }
-            },
-            [_vm._v("Illinois")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Indiana", id: "checkIndiana" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkIndiana" } },
-            [_vm._v("Indiana")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Kansas", id: "checkKansas" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkKansas" } },
-            [_vm._v("Kansas")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Kentucky", id: "checkKentucky" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkKentucky" }
-            },
-            [_vm._v("Kentucky")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Louisiana",
-              id: "checkLouisiana"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkLouisiana" }
-            },
-            [_vm._v("Louisiana")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Massachusetts",
-              id: "checkMassachusetts"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkMassachusetts" }
-            },
-            [_vm._v("Massachusetts")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Maryland", id: "checkMaryland" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkMaryland" }
-            },
-            [_vm._v("Maryland")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Maine", id: "checkMaine" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkMaine" } },
-            [_vm._v("Maine")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Michigan", id: "checkMichigan" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkMichigan" }
-            },
-            [_vm._v("Michigan")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Minnesota",
-              id: "checkMinnesota"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkMinnesota" }
-            },
-            [_vm._v("Minnesota")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Missouri", id: "checkMissouri" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkMissouri" }
-            },
-            [_vm._v("Missouri")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Mississippi",
-              id: "checkMississippi"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkMississippi" }
-            },
-            [_vm._v("Mississippi")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Montana", id: "checkMontana" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkMontana" } },
-            [_vm._v("Montana")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "North Carolina",
-              id: "checkNorthCarolina"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkNorthCarolina" }
-            },
-            [_vm._v("North Carolina")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "North Dakota",
-              id: "checkNorthDakota"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkNorthDakota" }
-            },
-            [_vm._v("North Dakota")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Nebraska", id: "checkNebraska" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkNebraska" }
-            },
-            [_vm._v("Nebraska")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "New Hampshire",
-              id: "checkNewHampshire"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkNewHampshire" }
-            },
-            [_vm._v("New Hampshire")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "New Jersey",
-              id: "checkNewJersey"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkNewJersey" }
-            },
-            [_vm._v("New Jersey")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "New Mexico",
-              id: "checkNewMexico"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkNewMexico" }
-            },
-            [_vm._v("New Mexico")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Nevada", id: "checkNevada" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkNevada" } },
-            [_vm._v("Nevada")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "New York", id: "checkNewYork" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkNewYork" } },
-            [_vm._v("New York")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Ohio", id: "checkOhio" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkOhio" } },
-            [_vm._v("Ohio")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Oklahoma", id: "checkOklahoma" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkOklahoma" }
-            },
-            [_vm._v("Oklahoma")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Oregon", id: "checkOregon" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkOregon" } },
-            [_vm._v("Oregon")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Pennsylvania",
-              id: "checkPennsylvania"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkPennsylvania" }
-            },
-            [_vm._v("Pennsylvania")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Puerto Rico",
-              id: "checkPuertoRico"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkPuertoRico" }
-            },
-            [_vm._v("Puerto Rico")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Rhode Island",
-              id: "checkRhodeIsland"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkRhodeIsland" }
-            },
-            [_vm._v("Rhode Island")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "South Carolina",
-              id: "checkSouthCarolina"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkSouthCarolina" }
-            },
-            [_vm._v("South Carolina")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "South Dakota",
-              id: "checkSouthDakota"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkSouthDakota" }
-            },
-            [_vm._v("South Dakota")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Tennessee",
-              id: "checkTennessee"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkTennessee" }
-            },
-            [_vm._v("Tennessee")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Texas", id: "checkTexas" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkTexas" } },
-            [_vm._v("Texas")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Utah", id: "checkUtah" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkUtah" } },
-            [_vm._v("Utah")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Virginia", id: "checkVirginia" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkVirginia" }
-            },
-            [_vm._v("Virginia")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Virgin Islands",
-              id: "checkVirginIslands"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkVirginIslands" }
-            },
-            [_vm._v("Virgin Islands")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Vermont", id: "checkVermont" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkVermont" } },
-            [_vm._v("Vermont")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Washington",
-              id: "checkWashington"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkWashington" }
-            },
-            [_vm._v("Washington")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "Wisconsin",
-              id: "checkWisconsin"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkWisconsin" }
-            },
-            [_vm._v("Wisconsin")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: {
-              type: "checkbox",
-              value: "West Virginia",
-              id: "checkWestVirginia"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "checkWestVirginia" }
-            },
-            [_vm._v("West Virginia")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "Wyoming", id: "checkWyoming" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "checkWyoming" } },
-            [_vm._v("Wyoming")]
-          )
-        ])
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
