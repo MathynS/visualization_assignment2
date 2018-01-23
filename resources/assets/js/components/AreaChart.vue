@@ -44,7 +44,7 @@
 			</div>
 			<div class="row">
 				<div class="chart-container">
-					<svg width="840" height="540" id="areasvg"></svg>
+					<svg width="800" height="540" class="svg-chart" id="areasvg"></svg>
 				</div>
 			</div>
 			<div class="row">

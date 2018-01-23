@@ -44124,7 +44124,10 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "chart-container" }, [
-            _c("svg", { attrs: { width: "840", height: "540", id: "areasvg" } })
+            _c("svg", {
+              staticClass: "svg-chart",
+              attrs: { width: "800", height: "540", id: "areasvg" }
+            })
           ])
         ]),
         _vm._v(" "),

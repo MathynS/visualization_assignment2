@@ -172,3 +172,21 @@ body { /* just for this demo. */
 .btn-arrow-left:after { /* hide arrow tails background */
     background-color: white;
 }
+
+.svg-chart{
+    padding-left: 50px;
+}
+
+.yaxis path,
+.yaxis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.xaxis path,
+.xaxis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}

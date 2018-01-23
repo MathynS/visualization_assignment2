@@ -1,7 +1,8 @@
 (function(){
-  //{top: 20, right: 55, bottom: 30, left: 40}
-  var margin = {top: 20, right: 55, bottom: 30, left: 40},
-      width  = 940 - margin.left - margin.right,
+  //original {top: 20, right: 55, bottom: 30, left: 40}
+  // width: 940
+  var margin = {top: 20, right: 40, bottom: 30, left: 20},
+      width  = 800 - margin.left - margin.right,
       height = 500  - margin.top  - margin.bottom;
 
   var x = d3.scale.ordinal()
@@ -107,14 +108,19 @@
     // append y axis into svg figure
     svg.append("g")
         .attr("class", "yaxis")
-        .call(yAxis)
+        .call(yAxis
+        .ticks(10)
+      .tickFormat(d3.format("0.2f")))
       .append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
         .attr("dy", ".71em")
         .attr("x",0 - (height / 2))
+        //.attr("x", 0)
         .style("text-anchor", "middle")
         .text("Number of Rounds");
+
+
 
     //draw the lines for the series of measurements
     var selection = svg.selectAll(".series")
