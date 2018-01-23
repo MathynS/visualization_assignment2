@@ -5,6 +5,7 @@
     <link href="{{ asset('css/area-component.css') }}" rel="stylesheet">
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="/js/areaChart.js"></script>
+    <script src="/js/trendChart.js"></script>
 </head>
 <body>
 

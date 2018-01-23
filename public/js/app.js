@@ -43578,6 +43578,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -43596,6 +43607,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			selectedStates: [],
 			selectedState: '',
 			statType: 'max',
+			trendEnabled: false,
 			averagedData: []
 		};
 	},
@@ -43605,7 +43617,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		axios.get('/data/cache/states').then(function (response) {
 			return _this.loadData(response.data);
 		}).then(function (response) {
-			return _this.drawChart();
+			return _this.drawCharts();
 		}).catch(function (error) {
 			return console.log(error);
 		});
@@ -43616,9 +43628,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.selectedStates.push(this.selectedState);
 			//console.log("adding state " + this.selectedState);
 			this.selectedState = '';
-			this.refreshChart();
+			this.refreshCharts();
 		},
-		refreshChart: function refreshChart() {
+		enableTrendChart: function enableTrendChart() {
+			console.log("**** enabling trend option ");
+			var enableTrendElement = document.getElementById("enableTrendOption");
+			this.trendEnabled = enableTrendElement.checked;
+			this.refreshCharts();
+			this.refres;
+		},
+		drawCharts: function drawCharts() {
+			if (this.trendEnabled) {
+				this.drawBothCharts();
+			} else {
+				this.drawAreaChart();
+			}
+		},
+		refreshCharts: function refreshCharts() {
+			if (this.trendEnabled) {
+				console.log("******************** trend enabled ********************");
+				this.refreshBothCharts();
+			} else {
+				this.refreshAreaChart();
+			}
+		},
+		refreshBothCharts: function refreshBothCharts() {
+			console.log(" ************************ Refreshing both charts...");
+			this.selectedStates = [];
+			var checkboxContainer = document.getElementById("us-states-container");
+			var checkboxes = checkboxContainer.getElementsByClassName("form-check-input");
+			for (var i = 0; i < checkboxes.length; i++) {
+				var state = checkboxes[i].value;
+				var isSelected = checkboxes[i].checked;
+				if (isSelected) {
+					this.selectedStates.push(state);
+				}
+			}
+			this.updateViewData();
+			this.computeMovingAverage();
+			this.drawBothCharts();
+		},
+		refreshChartsTwice: function refreshChartsTwice() {
+			this.refreshCharts();
+			this.refreshCharts();
+		},
+		refreshAreaChart: function refreshAreaChart() {
 			// update the list of states to show
 			this.selectedStates = [];
 			var checkboxContainer = document.getElementById("us-states-container");
@@ -43631,17 +43685,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				}
 			}
 			this.updateViewData();
-			this.drawChart();
+			// we shouldn't need to compute the moving average, just in case
+			this.computeMovingAverage();
+			this.drawAreaChart();
 		},
 		updateFirstDateFilter: function updateFirstDateFilter() {
 			console.log("updating first date filter");
 			this.firstDateFilter = this.createDate(this.firstDateFilterStr);
-			this.refreshChart();
+			this.refreshCharts();
 		},
 		updateLastDateFilter: function updateLastDateFilter() {
 			console.log("updating last date filter");
 			this.lastDateFilter = this.createDate(this.lastDateFilterStr);
-			this.refreshChart();
+			this.refreshCharts();
 		},
 		createCheckBoxMenu: function createCheckBoxMenu(state) {
 			var checkboxId = "check" + state.split(" ").join("");
@@ -43745,11 +43801,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				this.lastDateFilterStr = this.createDateStr(date);
 
 				// refresh chart
-				this.refreshChart();
+				this.refreshCharts();
 			}
 		},
 		increaseRangeOfDates: function increaseRangeOfDates() {
-			console.log(this.lastDateDataset);
+			//console.log(this.lastDateDataset);
 			if (this.lastDateFilter < this.lastDateDataset) {
 				// increase firstDateFilter
 				var year = this.firstDateFilter.getFullYear();
@@ -43792,7 +43848,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				this.lastDateFilterStr = this.createDateStr(date);
 
 				// refresh chart
-				this.refreshChart();
+				this.refreshCharts();
 			}
 		},
 		loadData: function loadData(response) {
@@ -43800,9 +43856,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.selectDefaultDates(response.dates);
 			this.backendData = response;
 			this.updateViewData();
+			this.computeMovingAverage();
 		},
 		createDate: function createDate(strDate) {
-			console.log(strDate);
+			//console.log(strDate);
 			var dateParts = strDate.split("-");
 			var year = Number(dateParts[0]);
 			var month = Number(dateParts[1]);
@@ -43824,13 +43881,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var dateStr = date.getFullYear().toString();
 			dateStr = dateStr + "-" + ('0' + (date.getMonth() + 1).toString()).slice(-2);
 			dateStr = dateStr + "-" + ('0' + date.getDate().toString()).slice(-2);
-			console.log(dateStr);
+			//console.log(dateStr);
 			return dateStr;
 		},
 
 
 		// compute a 5 month moving average
-		computeMovingAverage: function computeMovingAverage(state) {
+		computeMovingAverage: function computeMovingAverage() {
 			// lets work over the view data
 			this.averagedData = [];
 			var tempAveragedData = [];
@@ -43848,7 +43905,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				for (var entrie in this.viewData) {
 					var date = this.viewData[entrie]["quarter"];
 					pollutionValue = this.viewData[entrie][state];
-					console.log(pollutionValue);
+					//console.log(pollutionValue);
 
 					// add first two elements to perform the moving average
 					if (firstElement == true) {
@@ -43859,8 +43916,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					dataToAverage.push(pollutionValue);
 					dates.push(date);
 					entrieCounter += 1;
-					console.log("dataToAverage.length " + dataToAverage.length);
-					console.log("entrieCounter.length " + entrieCounter);
+					//console.log("dataToAverage.length " + dataToAverage.length);
+					//console.log("entrieCounter.length " + entrieCounter);
 				}
 
 				// add last two elements to perform the moving average
@@ -43900,9 +43957,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				var date = this.createDate(this.backendData.dates[dateId]);
 				if (date >= this.firstDateFilter && date <= this.lastDateFilter) {
 
-					console.log("firstDate: " + this.firstDateFilter);
-					console.log("date: " + date);
-					console.log("lastDateFilter: " + this.lastDateFilter);
+					//console.log("firstDate: " + this.firstDateFilter);
+					//console.log("date: " + date);
+					//console.log("lastDateFilter: " + this.lastDateFilter);
 					//c("**** responses dates");
 					//console.log(this.backendData.dates[dateId]);
 
@@ -43928,14 +43985,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					this.viewData.push(point);
 				}
 			}
-			console.log(this.viewData);
+			//console.log(this.viewData);
 		},
-		drawChart: function drawChart() {
+		drawBothCharts: function drawBothCharts() {
+			console.log("************** DrawBothCharts **************");
+			trendChart.draw(this.averagedData);
+			//trendAreaFirstChart.draw(this.averagedData);
+			//trendAreaSecondChart.draw(this.viewData);
+		},
+		drawAreaChart: function drawAreaChart() {
 			//console.log("this.firstDateFilter: " + this.firstDateFilter);
 			//console.log("this.lastDateFilter: " + this.lastDateFilter);
 			//console.log(typeof this.viewData);
-			this.computeMovingAverage('LA');
-			console.log(this.viewData);
+			//this.computeMovingAverage('LA');
+			//console.log(this.viewData);
+			console.log("************** DrawAreaChart **************");
 			areaChart.draw(this.viewData);
 		}
 	}
@@ -43974,7 +44038,7 @@ var render = function() {
                       function($event) {
                         _vm.pollutionType = "NO2"
                       },
-                      _vm.refreshChart
+                      _vm.refreshCharts
                     ]
                   }
                 }),
@@ -44001,7 +44065,7 @@ var render = function() {
                       function($event) {
                         _vm.pollutionType = "O3"
                       },
-                      _vm.refreshChart
+                      _vm.refreshCharts
                     ]
                   }
                 }),
@@ -44028,7 +44092,7 @@ var render = function() {
                       function($event) {
                         _vm.pollutionType = "SO2"
                       },
-                      _vm.refreshChart
+                      _vm.refreshCharts
                     ]
                   }
                 }),
@@ -44055,7 +44119,7 @@ var render = function() {
                       function($event) {
                         _vm.pollutionType = "CO"
                       },
-                      _vm.refreshChart
+                      _vm.refreshCharts
                     ]
                   }
                 }),
@@ -44123,12 +44187,10 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "chart-container" }, [
-            _c("svg", {
-              staticClass: "svg-chart",
-              attrs: { width: "800", height: "540", id: "areasvg" }
-            })
-          ])
+          _c("svg", {
+            staticClass: "svg-chart",
+            attrs: { width: "800", height: "540", id: "area-svg" }
+          })
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
@@ -44179,7 +44241,7 @@ var render = function() {
                     value: "Armed Forces America",
                     id: "checkArmedForcesAmerica"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44200,7 +44262,7 @@ var render = function() {
                     value: "Armed Forces",
                     id: "checkArmedForces"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44221,7 +44283,7 @@ var render = function() {
                     value: "Armed Forces Pacific",
                     id: "checkArmedForcesPacific"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44242,7 +44304,7 @@ var render = function() {
                     value: "Alaska",
                     id: "checkAlaska"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44263,7 +44325,7 @@ var render = function() {
                     value: "Alabama",
                     id: "checkAlabama"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44284,7 +44346,7 @@ var render = function() {
                     value: "Arkansas",
                     id: "checkArkansas"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44305,7 +44367,7 @@ var render = function() {
                     value: "Arizona",
                     id: "checkArizona"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44326,7 +44388,7 @@ var render = function() {
                     value: "California",
                     id: "checkCalifornia"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44347,7 +44409,7 @@ var render = function() {
                     value: "Colorado",
                     id: "checkColorado"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44368,7 +44430,7 @@ var render = function() {
                     value: "Connecticut",
                     id: "checkConnecticut"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44389,7 +44451,7 @@ var render = function() {
                     value: "Washington",
                     id: "checkWashington"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44410,7 +44472,7 @@ var render = function() {
                     value: "Delaware",
                     id: "checkDelaware"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44431,7 +44493,7 @@ var render = function() {
                     value: "Florida",
                     id: "checkFlorida"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44452,7 +44514,7 @@ var render = function() {
                     value: "Georgia",
                     id: "checkGeorgia"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44469,7 +44531,7 @@ var render = function() {
                 _c("input", {
                   staticClass: "form-check-input",
                   attrs: { type: "checkbox", value: "Guam", id: "checkGuam" },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44490,7 +44552,7 @@ var render = function() {
                     value: "Hawaii",
                     id: "checkHawaii"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44507,7 +44569,7 @@ var render = function() {
                 _c("input", {
                   staticClass: "form-check-input",
                   attrs: { type: "checkbox", value: "Iowa", id: "checkIowa" },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44524,7 +44586,7 @@ var render = function() {
                 _c("input", {
                   staticClass: "form-check-input",
                   attrs: { type: "checkbox", value: "Idaho", id: "checkIdaho" },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44545,7 +44607,7 @@ var render = function() {
                     value: "Illinois",
                     id: "checkIllinois"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44566,7 +44628,7 @@ var render = function() {
                     value: "Indiana",
                     id: "checkIndiana"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44587,7 +44649,7 @@ var render = function() {
                     value: "Kansas",
                     id: "checkKansas"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44608,7 +44670,7 @@ var render = function() {
                     value: "Kentucky",
                     id: "checkKentucky"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44629,7 +44691,7 @@ var render = function() {
                     value: "Louisiana",
                     id: "checkLouisiana"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44650,7 +44712,7 @@ var render = function() {
                     value: "Massachusetts",
                     id: "checkMassachusetts"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44671,7 +44733,7 @@ var render = function() {
                     value: "Maryland",
                     id: "checkMaryland"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44688,7 +44750,7 @@ var render = function() {
                 _c("input", {
                   staticClass: "form-check-input",
                   attrs: { type: "checkbox", value: "Maine", id: "checkMaine" },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44709,7 +44771,7 @@ var render = function() {
                     value: "Michigan",
                     id: "checkMichigan"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44730,7 +44792,7 @@ var render = function() {
                     value: "Minnesota",
                     id: "checkMinnesota"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44751,7 +44813,7 @@ var render = function() {
                     value: "Missouri",
                     id: "checkMissouri"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44772,7 +44834,7 @@ var render = function() {
                     value: "Mississippi",
                     id: "checkMississippi"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44793,7 +44855,7 @@ var render = function() {
                     value: "Montana",
                     id: "checkMontana"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44814,7 +44876,7 @@ var render = function() {
                     value: "North Carolina",
                     id: "checkNorthCarolina"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44835,7 +44897,7 @@ var render = function() {
                     value: "North Dakota",
                     id: "checkNorthDakota"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44856,7 +44918,7 @@ var render = function() {
                     value: "Nebraska",
                     id: "checkNebraska"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44877,7 +44939,7 @@ var render = function() {
                     value: "New Hampshire",
                     id: "checkNewHampshire"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44898,7 +44960,7 @@ var render = function() {
                     value: "New Jersey",
                     id: "checkNewJersey"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44919,7 +44981,7 @@ var render = function() {
                     value: "New Mexico",
                     id: "checkNewMexico"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44940,7 +45002,7 @@ var render = function() {
                     value: "Nevada",
                     id: "checkNevada"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44961,7 +45023,7 @@ var render = function() {
                     value: "New York",
                     id: "checkNewYork"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44978,7 +45040,7 @@ var render = function() {
                 _c("input", {
                   staticClass: "form-check-input",
                   attrs: { type: "checkbox", value: "Ohio", id: "checkOhio" },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -44999,7 +45061,7 @@ var render = function() {
                     value: "Oklahoma",
                     id: "checkOklahoma"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45020,7 +45082,7 @@ var render = function() {
                     value: "Oregon",
                     id: "checkOregon"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45041,7 +45103,7 @@ var render = function() {
                     value: "Pennsylvania",
                     id: "checkPennsylvania"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45062,7 +45124,7 @@ var render = function() {
                     value: "Puerto Rico",
                     id: "checkPuertoRico"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45083,7 +45145,7 @@ var render = function() {
                     value: "Rhode Island",
                     id: "checkRhodeIsland"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45104,7 +45166,7 @@ var render = function() {
                     value: "South Carolina",
                     id: "checkSouthCarolina"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45125,7 +45187,7 @@ var render = function() {
                     value: "South Dakota",
                     id: "checkSouthDakota"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45146,7 +45208,7 @@ var render = function() {
                     value: "Tennessee",
                     id: "checkTennessee"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45163,7 +45225,7 @@ var render = function() {
                 _c("input", {
                   staticClass: "form-check-input",
                   attrs: { type: "checkbox", value: "Texas", id: "checkTexas" },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45180,7 +45242,7 @@ var render = function() {
                 _c("input", {
                   staticClass: "form-check-input",
                   attrs: { type: "checkbox", value: "Utah", id: "checkUtah" },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45201,7 +45263,7 @@ var render = function() {
                     value: "Virginia",
                     id: "checkVirginia"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45222,7 +45284,7 @@ var render = function() {
                     value: "Virgin Islands",
                     id: "checkVirginIslands"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45243,7 +45305,7 @@ var render = function() {
                     value: "Vermont",
                     id: "checkVermont"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45264,7 +45326,7 @@ var render = function() {
                     value: "Washington",
                     id: "checkWashington"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45285,7 +45347,7 @@ var render = function() {
                     value: "Wisconsin",
                     id: "checkWisconsin"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45306,7 +45368,7 @@ var render = function() {
                     value: "West Virginia",
                     id: "checkWestVirginia"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45327,7 +45389,7 @@ var render = function() {
                     value: "Wyoming",
                     id: "checkWyoming"
                   },
-                  on: { change: _vm.refreshChart }
+                  on: { change: _vm.refreshCharts }
                 }),
                 _vm._v(" "),
                 _c(
@@ -45341,6 +45403,22 @@ var render = function() {
               ])
             ]
           )
+        ]),
+        _vm._v(" "),
+        _c("div", { attrs: { id: "trendOptionDiv" } }, [
+          _c("input", {
+            attrs: {
+              type: "checkbox",
+              id: "enableTrendOption",
+              name: "trend",
+              value: "show"
+            },
+            on: { change: _vm.enableTrendChart }
+          }),
+          _vm._v(" "),
+          _c("label", { attrs: { for: "enableTrendOption" } }, [
+            _vm._v("Show trend chart")
+          ])
         ])
       ])
     ])

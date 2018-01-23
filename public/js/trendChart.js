@@ -44,16 +44,16 @@
   //   .append("g")
   //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  var areaChart={};
+  var trendChart={};
 
 
-  areaChart.draw = function(data) {
-    console.log("*************************** drawing data: ");
+  trendChart.draw = function(data) {
+    console.log("*************************** drawing trend data: ");
     console.log(data);
 
     // remove previous svg images
-    //d3.selectAll("#trend-container trend-svg > *").remove();
     d3.selectAll("#area-svg > *").remove();
+    //d3.selectAll("#area-svg > *").remove();
 
     var svg = d3.select("#area-svg");
     //d3.csv("data/crunchbase-quarters.csv", function (error, data) {
@@ -132,11 +132,13 @@
 
 
       // fill the areas under the series of measurements
+
     selection.append("path")
-      .attr("class", "streamPath")
+      .attr("class", "line")
       .attr("d", function (d) { return area(d.values); })
-      .style("fill", function (d) { return color(d.name); })
+      .style("fill", "none")
       .style("stroke", "grey");
+
 
       // assign all the data in seriesArray to elements called series points
     var points = svg.selectAll(".seriesPoints")
@@ -198,6 +200,6 @@
       }
 
   }
-  this.areaChart=areaChart;
-  console.log(this.areaChart);
+  this.trendChart=trendChart;
+  console.log(this.trendChart);
 })();
