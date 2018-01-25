@@ -1,25 +1,5 @@
-<html>
-<head>
-    <meta charset="utf-8">
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/area-component.css') }}" rel="stylesheet">
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="/js/areaChart.js"></script>
+@extends('master')
 
-    <script src="/js/trendChart.js"></script>
-    <!--
-    <script src="/js/trendAreaFirstChart.js"></script>
-    <script src="/js/trendAreaSecondChart.js"></script>
-  -->
-
-</head>
-<body>
-
-	<div id="app">
-        	<area-chart></area-chart>
-	</div>
-
-    <script src="{!! asset('js/app.js') !!}"></script>
-
-</body>
-</html>
+@section('content')
+    <area-chart></area-chart>
+@endsection
