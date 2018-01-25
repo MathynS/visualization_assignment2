@@ -45,7 +45,7 @@
 
 			</div>
 			<div class="row">
-				<svg width="800" height="540" class="svg-chart" id="area-svg"></svg>
+				<svg width="800" height="480" class="svg-chart" id="area-svg"></svg>
 
 				<!--
 				<div class="trend-area-charts-container" id="trend-container" v-if="trendEnabled">
