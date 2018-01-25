@@ -93,7 +93,7 @@
                 var data = {};
                 for (var state in this.totalData) {
                     console.log(state);
-                    if (this.totalData[state][this.pollutionType][date] !== undefined) {
+                    if (this.totalData[state][this.pollutionType] !== undefined && this.totalData[state][this.pollutionType][date] !== undefined) {
                         data[state] = this.totalData[state][this.pollutionType][date];
                     }
                 }
