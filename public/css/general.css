@@ -152,7 +152,6 @@
     transition: .4s;
 }
 
-
 .checker:before {
     position: absolute;
     content: "";
@@ -188,11 +187,50 @@ input:checked + .checker:before {
     border-radius: 50%;
 }
 
-
-/** Styles for buttons **/
-body { /* just for this demo. */
-    padding: 30px;
+.checkbox-container {
+  /*padding-right: 20px;*/
 }
+
+.dropdown-checkbox {
+  border:2px solid #ccc;
+  height: 300px;
+  width: 220px;
+
+  /*
+  //margin-left: 20px;
+  //padding-left: 10px;
+  */
+  overflow-y: scroll;
+}
+
+.right-aligned {
+  float: right;
+}
+
+.left-aligned {
+  float: left;
+}
+
+.chart-container {
+  border-left: 2px;
+  border-right: 2px;
+  margin-top: 10px;
+  border-bottom: 5px;
+  /*padding-left: 30px;*/
+}
+
+.vis-column {
+  box-sizing: border-box;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.states-column {
+  box-sizing: border-box;
+}
+
 .btn { /* just for this demo. */
     margin-top: 5px;
     font-size: 21px;
@@ -275,8 +313,4 @@ body { /* just for this demo. */
     fill: none;
     stroke: black;
     shape-rendering: crispEdges;
-}
-
-#toolbar {
-  margin-bottom: 5px;
 }

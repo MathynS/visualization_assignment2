@@ -2,13 +2,13 @@
 <head>
     <meta charset="utf-8">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/general.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <script src="/js/uStates.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="/js/areaChart.js"></script>
     <script src="/js/trendChart.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
+    <link href="{{ asset('css/general.css') }}" rel="stylesheet">
 
 </head>
 <body>

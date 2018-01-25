@@ -11,16 +11,16 @@
 |
 */
 
+Route::get('/', function () {
+    return view('map');
+});
+
 Route::get('/map', function () {
     return view('map');
 });
 
 Route::get('/chart', function () {
     return view('area');
-});
-
-Route::get('/test', function () {
-    return view('county_map');
 });
 
 Route::prefix('data')->group(function() {
