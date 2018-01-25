@@ -43,22 +43,7 @@
 
 <script>
 
-
-    function doubleDigit(digit) {
-        if (digit.toString().length == 1) {
-            return "0" + digit;
-        }
-        return digit;
-    }
-
-    function formatDate(date) {
-        var day = doubleDigit(date.getDate());
-        var month = doubleDigit(date.getMonth()+1);
-        var year = date.getFullYear();
-        return year + '-' + month + '-' + day + " 00:00:00";
-    }
-
-    function tooltipHtml(n, d){	/* function to create html content string in tooltip div. */
+   function tooltipHtml(n, d){	/* function to create html content string in tooltip div. */
         return "<h4>"+n+"</h4><table>"+
             "<tr><td>Max</td><td>"+(d.max)+"</td></tr>"+
             "<tr><td>Average</td><td>"+(d.mean)+"</td></tr>"+
@@ -68,7 +53,8 @@
     export default {
         data: function(){
             return{
-                date: new Date('2000-01-01'),
+                dates: [],
+                date: '2000-01-01 00:00:00',
                 totalData: {},
                 dateSlider: 0,
                 lastSlider: 0,
@@ -83,28 +69,23 @@
         },
         methods: {
             setData(data) {
+                this.dates = data['dates'];
                 this.totalData = data['data'];
                 this.maxima = data['maxima'];
                 this.getMapData('2000-01-01 00:00:00');
             },
             getMapData(date) {
-                console.log(date);
-                console.log(this.pollutionType);
                 var data = {};
                 for (var state in this.totalData) {
-                    console.log(state);
                     if (this.totalData[state][this.pollutionType] !== undefined && this.totalData[state][this.pollutionType][date] !== undefined) {
                         data[state] = this.totalData[state][this.pollutionType][date];
                     }
                 }
-                console.log(data);
                 this.drawMap(data);
             },
             updateDate() {
-                console.log(this.dateSlider);
-                this.date.setMonth(this.date.getMonth() + (this.dateSlider - this.lastSlider));
-                this.lastSlider = this.dateSlider;
-                this.getMapData(formatDate(this.date));
+                this.date = this.dates[this.dateSlider];
+                this.getMapData(this.date);
             },
             drawMap(data) {
                 ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
@@ -122,12 +103,10 @@
                 for (var state in data) {
                     if (this.maxima[this.pollutionType] !== undefined)
                     {
-                        console.log(data[state]['max'] ,this.maxima[this.pollutionType]['max']);
                         data[state]['color'] = d3.interpolate("#ffffcc", "#800026")
                             (data[state]['max']/this.maxima[this.pollutionType]['max']);
                     }
                 }
-                console.log(data)
                 d3.select('svg').text('');
                 uStates.draw("#statesvg", data, tooltipHtml);
                 d3.select(self.frameElement).style("height", "600px");
