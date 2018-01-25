@@ -31,6 +31,12 @@
       .y0(function (d) { return y(d.y0); })
       .y1(function (d) { return y(d.y0 + d.y); });
 
+  var lines = d3.svg.line()
+    .interpolate("cardinal")
+    .x(function(d) { return x(d.label) + x.rangeBand() / 2; })
+    .y(function(d) { return y(d.value); })
+
+
   // var color =   d3.scale.linear()
   //   .interpolate(d3.interpolateHcl)
   //   .range(["#9AF768", "#F27A4D"]);
@@ -84,7 +90,7 @@
 
     // set height of the graph
     y.domain([0, d3.max(seriesArr, function (c) {
-        return d3.max(c.values, function (d) { return d.y0 + d.y; });
+        return d3.max(c.values, function (d) { return d.value + d.value/20; });
       })]);
 
 
@@ -133,12 +139,19 @@
 
       // fill the areas under the series of measurements
 
+      /*
     selection.append("path")
       .attr("class", "line")
       .attr("d", function (d) { return area(d.values); })
       .style("fill", "none")
-      .style("stroke", "grey");
-
+      .style("stroke", function (d) { return color(d.name); })
+      .style("stroke-width", 2);
+      */
+      selection.append("path")
+               .attr("d", function(d) { return lines(d.values);})
+               .attr("stroke", function (d) {return color(d.name); })
+               .attr("stroke-width", 3)
+               .attr("fill", "none");
 
       // assign all the data in seriesArray to elements called series points
     var points = svg.selectAll(".seriesPoints")
@@ -152,8 +165,8 @@
       .enter().append("circle")
        .attr("class", "point")
        .attr("cx", function (d) { return x(d.label) + x.rangeBand() / 2; })
-       .attr("cy", function (d) { return y(d.y0 + d.y); })
-       .attr("r", "2px")
+       .attr("cy", function (d) { return y(d.value); })
+       .attr("r", "4px")
        .style("fill",function (d) { return color(d.name); })
        .on("mouseover", function (d) { showPopover.call(this, d); })
        .on("mouseout",  function (d) { removePopovers(); })

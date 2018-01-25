@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-9 vis-column">
-			<div class="row">
+			<div class="row" id="toolbar">
 				<div class="col-xs-6">
 					<div class="row">
 	            <span>NO2</span>
@@ -33,10 +33,12 @@
 				<div class="col-xs-6">
     			<div class="row">
         		<div class='col-xs-6'>
-            	<input type="date" v-model="firstDateFilterStr" v-on:input="updateFirstDateFilter" name="firstDateFilterInput">
+							<label for="firstDateFilter">First month</label>
+            	<input type="date" v-model="firstDateFilterStr" v-on:input="updateFirstDateFilter" name="firstDateFilterInput" id="firstDateFilter">
         		</div>
         		<div class='col-xs-6'>
-            	<input type="date" v-model="lastDateFilterStr" v-on:input="updateLastDateFilter" name="lastDateFilterInput">
+							<label for="lastDateFilter">Last month</label>
+            	<input type="date" v-model="lastDateFilterStr" v-on:input="updateLastDateFilter" name="lastDateFilterInput" id="secondDateFilter">
         		</div>
     			</div>
 				</div>
@@ -44,9 +46,11 @@
 			</div>
 			<div class="row">
 				<svg width="800" height="540" class="svg-chart" id="area-svg"></svg>
+
 				<!--
 				<div class="trend-area-charts-container" id="trend-container" v-if="trendEnabled">
-					<svg width="800" height="540" class="svg-chart" id="trend-svg"></svg>
+					<svg width="800" height="270" class="svg-chart" id="ttrend-svg"></svg>
+					<svg width="800" height="270" class="svg-chart" id="tarea-svg"></svg>
 				</div>
 				<div class="area-chart-container" id="area-container" v-else>
 					<svg width="800" height="540" class="svg-chart" id="area-svg"></svg>
@@ -387,12 +391,6 @@
 						this.computeMovingAverage();
 						this.drawBothCharts();
 					},
-
-					refreshChartsTwice(){
-						this.refreshCharts();
-						this.refreshCharts();
-					},
-
 
 					refreshAreaChart(){
 						// update the list of states to show
