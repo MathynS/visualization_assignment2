@@ -139,8 +139,9 @@
         .attr("dy", ".71em")
         .attr("x",0 - (height / 2))
         //.attr("x", 0)
+        .style("font-weight", "bold")
         .style("text-anchor", "middle")
-        .text("Number of Rounds");
+        .text("Parts per million");
 
 
 
