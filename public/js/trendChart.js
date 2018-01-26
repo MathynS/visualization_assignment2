@@ -93,6 +93,10 @@
         return d3.max(c.values, function (d) { return d.value + d.value/20; });
       })]);
 
+      // compute values needed to assign labels in the x axis
+      var numberOfMonths = data.length;
+      var firstMonth = data[0]["quarter"];
+      var monthToLabel = firstMonth.split("-")[0];
 
     // append x axis into svg figure
     svg.append("g")
@@ -101,6 +105,16 @@
         .call(xAxis)
         .selectAll("text")
             .style("text-anchor", "end")
+            .style("font-weight", "bold")
+            .style("opacity", function(d){
+              if (numberOfMonths > 48 && d.startsWith(monthToLabel)){
+                return 1;
+              } else if (numberOfMonths <= 48){
+                return 1;
+              } else {
+                return 0;
+              }
+            })
             .attr("dx", "-.8em")
             .attr("dy", ".15em")
             .attr("transform", function(d) {
